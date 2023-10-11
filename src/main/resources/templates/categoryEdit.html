@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>カテゴリー編集</title>
+</head>
+<body>
+	<h1>カテゴリー編集</h1>
+	
+	こんにちは、[[${@account.name}]]さん
+	
+	<form action = "" method = "">
+		<table border = "1">
+			<tr>
+				<th>カテゴリー名</th>
+				<th>
+					<input type = "text" name = "" th:value = "ほげ">
+				</th>
+			</tr>
+		</table>
+		
+		<button>この内容で更新</button>
+		
+	</form>
+	
+	<a href = "/category">カテゴリー一覧へ戻る</a> 
+	
+	<br>
+	
+	<a href = "/taskList">ToDo一覧へ戻る</a>
+
+</body>
+</html>

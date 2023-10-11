@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ToDo更新</title>
+</head>
+<body>
+	<h1>ToDo更新</h1>
+	
+	こんにちは、[[${@account.name}]]さん
+	
+	<a href = "/login">ログアウト</a>
+	
+	<form action = "" method = "">
+		<table border = "1">
+			<tr>
+				<th>ToDo</th>
+				<td>
+					<input type = "text" th:value = "ほげ">
+				</td>
+			</tr>
+			
+			<tr>
+				<th>詳細</th>
+				<td>
+					<input type = "text" th:value = "ほげ">
+				</td>
+			</tr>
+			
+			<tr>
+				<th>カテゴリー</th>
+				<td>
+					<select>
+<!--						<option th:each = "" th:text = "" th:value = ""></option>-->
+						<option th:text = "ほげ" th:value = "0"></option>
+					</select>
+				</td>
+			</tr>
+			
+			<tr>
+				<th>期日</th>
+				<td>
+					<input type = "date" th:value = "1998-12-18">
+				</td>
+			</tr>
+		</table>
+		
+		<button>この内容で更新</button>
+		
+	</form>
+
+	<a href = "/taskList">一覧へ戻る</a>
+
+</body>
+</html>
+
+
+

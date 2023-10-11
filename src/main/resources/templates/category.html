@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>カテゴリー管理</title>
+</head>
+<body>
+	<h1>カテゴリー管理</h1>
+	
+	こんにちは、[[${@account.name}]]さん
+	
+	<a href = "/login">ログアウト</a>
+
+	<br>
+
+	<form action = "/category/add" method = "get">
+		<button>新規登録</button>
+	</form>
+
+	<table border = "1">
+		<tr>
+			<th>カテゴリー名</th>
+			<th>更新</th>
+			<th>削除</th>
+		</tr>
+<!--		<tr th:each = "">-->
+		<tr>
+			<th th:text = "ほげ"></th>
+			<th>
+				<form action = "/category/edit" method = "get">
+					<button>更新</button>
+				</form>
+			</th>
+			<th>
+				<form action = "" method = "">
+					<button>削除</button>
+				</form>
+			</th>
+		</tr>
+	</table>
+		
+	<a href = "/taskList">ToDo一覧へ戻る</a>
+
+
+</body>
+</html>
+
+
+
+
