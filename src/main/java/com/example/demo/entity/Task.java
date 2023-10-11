@@ -23,7 +23,7 @@ public class Task {
 	private Integer userId;
 	
 	@Column(name = "category_id")
-	private Integer categroyId;
+	private Integer categoryId;
 	
 	private String task;
 	
@@ -49,12 +49,12 @@ public class Task {
 //		this.userId = userId;
 //	}
 
-	public Integer getCategroyId() {
-		return categroyId;
+	public Integer getCategoryId() {
+		return categoryId;
 	}
 
-//	public void setCategroyId(Integer categroyId) {
-//		this.categroyId = categroyId;
+//	public void setCategoryId(Integer categroyId) {
+//		this.categoryId = categoryId;
 //	}
 
 	public String getTask() {

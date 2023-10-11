@@ -22,6 +22,26 @@ public class User {
 	
 	private String name;
 	private String password;
+	
+	//	コンストラクタ
+	//	デフォルト
+	public User() {
+		
+	}
+	
+	//	新規登録
+	public User(String loginId, String name, String password) {
+		this.loginId = loginId;
+		this.name = name;
+		this.password = password;
+	}
+	
+	//	更新
+	public User(Integer id,String loginId, String name, String password) {
+		this(loginId, name, password);
+		this.id = id;
+	}
+	
 		
 	//	ゲッター・セッター
 	public Integer getId() {

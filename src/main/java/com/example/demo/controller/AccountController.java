@@ -47,10 +47,13 @@ public class AccountController {
 	public String login(
 			@RequestParam(name = "loginId", defaultValue = "") String loginId,
 			@RequestParam(name = "password", defaultValue = "") String password,
+//			@ModelAttribute("complete") String complete,
 			Model model
 			) {
 		
 		String result = "";
+		
+//		model.addAttribute("msg", complete);
 		
 		List<User> userList = userRepository.findByLoginIdAndPassword(loginId, password);
 		
@@ -59,11 +62,30 @@ public class AccountController {
 			account.setName(user.getName());
 			result = "/taskList";
 		}else {
-			model.addAttribute("errMsg", "ユーザーIDとパスワードが一致しませんでした");
+			model.addAttribute("msg", "ユーザーIDとパスワードが一致しませんでした");
 			result = "/login";
 		}
 		
 		return result;
+		
+	}
+	
+	//	ユーザー新規登録　実行
+	@PostMapping("/user/add")
+	public String add(
+			@RequestParam(name = "name", defaultValue = "") String name,
+			@RequestParam(name = "loginId", defaultValue = "") String loginId,
+			@RequestParam(name = "password", defaultValue = "") String password
+//			,RedirectAttributes redirectAttributes
+			) {
+		
+		User adduser = new User(loginId, name, password);
+		
+		userRepository.save(adduser);
+		
+//		redirectAttributes.addFlashAttribute("complete", "ユーザー登録が完了しました");
+		
+		return "redirect:/login";
 		
 	}
 	

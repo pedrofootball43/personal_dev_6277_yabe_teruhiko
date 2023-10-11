@@ -13,10 +13,19 @@
 	
 	<br>
 	
-	<select name = "">
-<!--			<option　th:each = "" th:text = "" th:value = ""></option>-->
-			<option th:text = "ほげ" th:value = "0"></option>
-	</select>
+<!--	<form th:action = "'/taskList?categoryId=' + ${category.id}" method = "get">-->
+<!--		<select name = "categoryId">-->
+<!--				<option th:each = "category : ${categories}" th:text = "category.name" -->
+<!--					th:value = "category.id"></option>-->
+<!--		</select>-->
+	
+<!--		<input type = "radio" th:each = "category : ${categories}" th:text = "category.name"-->
+<!--			th:href = "'items?categoryId=' + ${category.id}" th:value = "category.id">			-->
+			
+<!--		<button>検索</button>-->
+<!--	</form>-->
+	
+	<br>
 	
 	<a href = "/category">カテゴリー管理</a>
 	
@@ -34,12 +43,11 @@
 			<th>完了</th>
 		</tr>
 		
-<!--		<tr th:eacth = "">-->
-			<tr>
-			<td th:text = "ほげ"></td>
-			<td th:text = "ほげ"></td>
-			<td th:text = "ほげ"></td>
-			<td th:text = "ほげ"></td>
+		<tr th:each = "task : ${tasks}">
+			<td th:text = "task.id"></td>
+			<td th:text = "task.task"></td>
+			<td th:text = "task.categoryId"></td>
+			<td th:text = "task.deadline"></td>
 			<td>
 				<form action = "/taskList/edit" method = "get">
 					<button>更新</button>

@@ -8,7 +8,7 @@
 	<h1>ログイン画面</h1>
 	
 	<ul style="list-style: none; color: red;">
-		<li th:text = "${errMsg}"></li>
+		<li th:text = "${msg}"></li>
 	</ul>
 	
 	<form action = "/login" method = "post">
@@ -16,8 +16,8 @@
 		
 		<br>
 		
-<!--		<input type = "text" name = "password" placeholder = "パスワード">-->
-		<input type = "password" name = "" placeholder = "パスワード">
+		<input type = "text" name = "password" placeholder = "パスワード">
+<!--		<input type = "password" name = "" placeholder = "パスワード">-->
 		
 		<br>
 		

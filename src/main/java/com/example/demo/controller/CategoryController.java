@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class CategoryController {
 
+
+	
 	//	カテゴリー一覧画面　表示
 	@GetMapping("/category")
 	public String index() {
@@ -23,6 +25,8 @@ public class CategoryController {
 	public String edit() {
 		return "categoryEdit";
 	}
+	
+	
 	
 }
 
