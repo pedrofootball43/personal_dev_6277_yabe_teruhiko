@@ -8,22 +8,23 @@
 	<h1>ToDo一覧</h1>
 
 	こんにちは、[[${@account.name}]]さん
+	
 
 	<a href = "/login">ログアウト</a>
 	
 	<br>
 	
-<!--	<form th:action = "'/taskList?categoryId=' + ${category.id}" method = "get">-->
-<!--		<select name = "categoryId">-->
-<!--				<option th:each = "category : ${categories}" th:text = "category.name" -->
-<!--					th:value = "category.id"></option>-->
-<!--		</select>-->
+	<form action = "/taskList" method = "get">
+		<select name = "categoryId">
+				<option value = "0">全表示</option>
+				<option  th:each = "category : ${categories}" th:text = "${category.name}" th:value = "${category.id}"></option>
+		</select>
 	
 <!--		<input type = "radio" th:each = "category : ${categories}" th:text = "category.name"-->
 <!--			th:href = "'items?categoryId=' + ${category.id}" th:value = "category.id">			-->
 			
-<!--		<button>検索</button>-->
-<!--	</form>-->
+		<button>検索</button>
+	</form>
 	
 	<br>
 	
@@ -41,24 +42,28 @@
 			<th>期日</th>
 			<th>更新</th>
 			<th>完了</th>
+			<th>ユーザID</th>
 		</tr>
 		
-		<tr th:each = "task : ${tasks}">
-			<td th:text = "task.id"></td>
-			<td th:text = "task.task"></td>
-			<td th:text = "task.categoryId"></td>
-			<td th:text = "task.deadline"></td>
+		<tr th:each = "t : ${tasks}">
+			<td th:text = "${t.id}"></td>
+			<td th:text = "${t.task}"></td>
+			<td th:text = "${t.categoryId}"></td>
+			<td th:text = "${t.deadline}"></td>
 			<td>
-				<form action = "/taskList/edit" method = "get">
+				<form th:action = "'/taskList/' + ${t.id} + '/edit'" method = "get">
 					<button>更新</button>
 				</form>
 			</td>
 			
 			<td>
-				<form action = "" method = "">
+				<form th:action = "'/taskList/' + ${t.id} + '/delete'" method = "post">
 					<button>完了</button>
 				</form>
 			</td>
+			
+			<td th:text = "${t.userId}"></td>
+			
 		</tr>
 		
 	</table>

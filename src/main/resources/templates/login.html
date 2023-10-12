@@ -8,7 +8,7 @@
 	<h1>ログイン画面</h1>
 	
 	<ul style="list-style: none; color: red;">
-		<li th:text = "${msg}"></li>
+		<li th:each = "err : ${errs}" th:text = "${err}"></li>
 	</ul>
 	
 	<form action = "/login" method = "post">
@@ -21,11 +21,13 @@
 		
 		<br>
 		
-		<a href = "/userAdd">新規登録</a>
+
 		
 		<button>ログイン</button>
 
 	</form>
+
+	<a href = "/userAdd">新規登録</a>
 	
 
 </body>

@@ -23,16 +23,15 @@
 			<th>更新</th>
 			<th>削除</th>
 		</tr>
-<!--		<tr th:each = "">-->
-		<tr>
-			<th th:text = "ほげ"></th>
+		<tr th:each = "category : ${categories}">
+			<th th:text = "${category.name}"></th>
 			<th>
-				<form action = "/category/edit" method = "get">
+				<form th:action = "'/category/' + ${category.id} + '/edit'" method = "get">
 					<button>更新</button>
 				</form>
 			</th>
 			<th>
-				<form action = "" method = "">
+				<form th:action = "'/category/' + ${category.id} + '/delete'" method = "post">
 					<button>削除</button>
 				</form>
 			</th>

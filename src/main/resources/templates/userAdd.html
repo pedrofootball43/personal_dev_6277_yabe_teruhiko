@@ -7,19 +7,23 @@
 <body>
 	<h1>ユーザー登録</h1>
 	
-	<form action = "/user/add" method ="post">
+	<ul style="list-style: none; color: red;">
+		<li th:each = "err : ${errs}" th:text = "${err}"></li>
+	</ul>
+	
+	<form action = "/userAdd" method ="post">
 		<table border = "1">
 			<tr>
 				<th>ユーザーネーム</th>
 				<td>
-					<input type = "text" name = "name">
+					<input type = "text" name = "name" th:value = "${name}">
 				</td>
 			</tr>
 			
 			<tr>
 				<th>ユーザーID</th>
 				<td>
-					<input type = "text" name = "loginId">
+					<input type = "text" name = "loginId" th:value = "${loginId}">
 				</td>
 			</tr>
 			

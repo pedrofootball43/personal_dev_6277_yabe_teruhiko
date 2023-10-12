@@ -9,12 +9,12 @@
 	
 	こんにちは、[[${@account.name}]]さん
 	
-	<form action = "" method = "">
+	<form th:action = "'/category/' + ${category.id} + '/edit'" method = "post">
 		<table border = "1">
 			<tr>
 				<th>カテゴリー名</th>
 				<th>
-					<input type = "text" name = "" th:value = "ほげ">
+					<input type = "text" name = "name" th:value = "${category.name}">
 				</th>
 			</tr>
 		</table>

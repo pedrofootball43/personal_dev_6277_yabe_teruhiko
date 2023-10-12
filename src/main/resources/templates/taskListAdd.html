@@ -11,28 +11,28 @@
 	
 	<a href = "/login">ログアウト</a>
 	
-	<form action = "" method = "">
+	<form action = "/taskList/add" method = "post">
 		<table border  = "1">
 			<tr>
 				<th>ToDo</th>
 				<td>
-					<input type = "text" name = "">
+					<input type = "text" name = "task">
 				</td>
 			</tr>
 			
 			<tr>
 				<th>詳細</th>
 				<td>
-					<input type = "text" name = "">
+					<input type = "text" name = "detail">
 				</td>
 			</tr>
 			
 			<tr>
 				<th>カテゴリー</th>
 				<td>
-					<select name = "">
-<!--						<option th:each = "" th:text = "" th:value = ""></option>-->
-						<option th:text = "ほげ" th:value = "0"></option>
+					<select name = "categoryId">
+						<option th:each = "category : ${categories}" th:text = "${category.name}" th:value = "${category.id}"></option>
+<!--						<option th:text = "ほげ" th:value = "0"></option>-->
 					</select>
 				</td>
 			</tr>
@@ -40,7 +40,7 @@
 			<tr>
 				<th>期日</th>
 				<td>
-					<input type = "date" name = "">
+					<input type = "date" name = "deadline">
 				</td>
 			</tr>
 		</table>
