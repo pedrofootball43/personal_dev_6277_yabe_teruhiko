@@ -9,6 +9,10 @@
 	
 	こんにちは、[[${@account.name}]]さん
 	
+	<ul style="list-style: none; color: red;">
+		<li th:each = "err : ${errs}" th:text = "${err}"></li>
+	</ul>
+	
 	<form th:action = "'/category/' + ${category.id} + '/edit'" method = "post">
 		<table border = "1">
 			<tr>
