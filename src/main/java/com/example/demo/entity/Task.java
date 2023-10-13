@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +30,8 @@ public class Task {
 	@Column(name = "task_detail")
 	private String taskDetail;
 
-	private String deadline;
+	//	private String deadline;
+	private LocalDate deadline;
 
 	//	コンストラクタ
 	//	デフォルト
@@ -37,8 +40,18 @@ public class Task {
 	}
 
 	//	追加
+	//	元データ
+	//	public Task(
+	//			Integer userId, Integer categoryId, String task, String taskDetail, String deadline) {
+	//		this.userId = userId;
+	//		this.categoryId = categoryId;
+	//		this.task = task;
+	//		this.taskDetail = taskDetail;
+	//		this.deadline = deadline;
+	//	}
+
 	public Task(
-			Integer userId, Integer categoryId, String task, String taskDetail, String deadline) {
+			Integer userId, Integer categoryId, String task, String taskDetail, LocalDate deadline) {
 		this.userId = userId;
 		this.categoryId = categoryId;
 		this.task = task;
@@ -47,8 +60,15 @@ public class Task {
 	}
 
 	//　更新
+	//	元データ
+	//	public Task(
+	//			Integer id, Integer userId, Integer categoryId, String task, String taskDetail, String deadline) {
+	//		this(userId, categoryId, task, taskDetail, deadline);
+	//		this.id = id;
+	//	}
+
 	public Task(
-			Integer id, Integer userId, Integer categoryId, String task, String taskDetail, String deadline) {
+			Integer id, Integer userId, Integer categoryId, String task, String taskDetail, LocalDate deadline) {
 		this(userId, categoryId, task, taskDetail, deadline);
 		this.id = id;
 	}
@@ -95,7 +115,11 @@ public class Task {
 	//	}
 
 	public String getDeadline() {
-		return deadline;
+
+		//		return deadline;
+		return deadline.getYear() + "/" +
+				deadline.getMonthValue() + "/" +
+				deadline.getDayOfMonth();
 	}
 
 	//	public void setDeadline(LocalDate deadline) {

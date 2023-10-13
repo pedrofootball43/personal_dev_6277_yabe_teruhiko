@@ -11,19 +11,47 @@
 	
 	<a href = "/login">ログアウト</a>
 	
+	<ul style="list-style: none; color: red;">
+		<li th:each = "err : ${errs}" th:text = "${err}"></li>
+	</ul>
+	
 	<form th:action = "'/taskList/' + ${t.id} + '/edit'" method = "post">
 		<table border = "1">
 			<tr>
 				<th>ToDo</th>
 				<td>
-					<input type = "text" name = "task" th:value = "${t.task}">
+					<th:block th:unless = "${err2}">
+						<input 
+							type = "text" 
+							name = "task" 
+							th:value = "${t.task}">
+					</th:block>
+					
+					<th:block th:if = "${err2}">
+						<input 
+							type = "text" 
+							name = "task" 
+							value = "">
+					</th:block>
 				</td>
 			</tr>
 			
 			<tr>
 				<th>詳細</th>
 				<td>
-					<input type = "text" name = "taskDetail" th:value = "${t.taskDetail}">
+					<th:block th:unless = "${err2}">
+						<input 
+							type = "text" 
+							name = "taskDetail" 
+							th:value = "${t.taskDetail}">
+					</th:block>
+					
+					<th:block th:if = "${err2}">
+						<input 
+							type = "text" 
+							name = "taskDetail" 
+							th:value = "${taskDetail}">
+					</th:block>
 				</td>
 			</tr>
 			
@@ -31,7 +59,23 @@
 				<th>カテゴリー</th>
 				<td>
 					<select name = "categoryId">
-						<option th:each = "category : ${categories}" th:text = "${category.name}" th:value = "${category.id}"></option>
+						<th:block th:unless = "${err2}">
+							<option 
+								th:each = "category : ${categories}" 
+								th:text = "${category.name}" 
+								th:value = "${category.id}"
+								th:selected = "${category.id == selectedValue}">
+							</option>
+						</th:block>
+						
+						<th:block th:if = "${err2}">
+							<option 
+								th:each = "category : ${categories}" 
+								th:text = "${category.name}" 
+								th:value = "${category.id}"
+								th:selected = "${category.id == categoryId}">
+							</option>
+						</th:block>
 					</select>
 				</td>
 			</tr>
@@ -39,8 +83,11 @@
 			<tr>
 				<th>期日</th>
 				<td>
-					<input type = "date" name = "deadline" th:value = "${deadline}">
-<!--					<input type = "date" name = "deadline" th:value = "1998-12-12">-->
+					<input 
+						type = "date" 
+						name = "deadline" 
+						th:value = "${deadline}">
+<!--						th:value = "${t.deadline}"-->
 				</td>
 			</tr>
 		</table>

@@ -23,5 +23,6 @@ CREATE TABLE tasks
     category_id INTEGER,
     task TEXT,
     task_detail TEXT,
-    deadline TEXT
+    /*deadline TEXT*/
+    deadline DATE
 );

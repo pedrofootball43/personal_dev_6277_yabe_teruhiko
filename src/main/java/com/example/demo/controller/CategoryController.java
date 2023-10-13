@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Category;
@@ -34,38 +33,29 @@ public class CategoryController {
 	//	カテゴリー一覧画面　表示
 	@GetMapping("/category")
 	public String index(
-			//			@ModelAttribute("errs") List<String> errs,
-			Model model,
-			ModelAndView modelAndView) {
+			Model model) {
 
 		List<String> errList = new ArrayList<>();
-		List<Category> categoryList = categoryRepository.findAll();
 
+		//		List<Category> categoryList = categoryRepository.findAll();
+		List<Category> categoryList = categoryRepository.findAllByOrderByIdAsc();
 		model.addAttribute("categories", categoryList);
 
-		//		String err1 = "";
-		//		String err2 = "";
+		//		テストコード　動く
+		//		String abc = (String) model.getAttribute("abc");
+		//		model.addAttribute("abc", abc);
 
-		//		String err1 = (String) model.getAttribute("err1");
-		//		String err2 = (String) model.getAttribute("err2");
+		String err1 = (String) model.getAttribute("err1");
+		String err2 = (String) model.getAttribute("err2");
+		errList.add(err1);
+		errList.add(err2);
 
-		//		if (!(err1.equals(""))) {
-		//		errList.add(err1);
-		//		}
-		//
-		//		if (!(err2.equals(""))) {
-		//		errList.add(err2);
-		//		}
+		//		警告が出てしまう
+		//		List<String> errList =  (List<String>)model.getAttribute("errList");
 
-		//		if (errList.size() != 0) {
-
-		//		modelAndView.addObject("category", errList);
-		//		modelAndView.setViewName("category");
-		//		model.addAttribute("errs",errList);
-		//		}
+		model.addAttribute("errs", errList);
 
 		return "category";
-		//		return modelAndView;
 
 	}
 
@@ -131,19 +121,25 @@ public class CategoryController {
 
 		Category category = categoryRepository.findById(id).get();
 
-		//		if (taskList.size() != 0) {
-		//			errList.add("カテゴリ：" + category.getName() + "　に属したToDoがあるため削除できません");
-		//			errList.add("対象ToDo：" + (int) taskList.size() + "コ");
-		//			redirectAttributes.addFlashAttribute("errs", errList);
-		//			err1 = ("カテゴリ：" + category.getName() + "　に属したToDoがあるため削除できません");
-		//			err2 = ("対象ToDo：" + (int) taskList.size() + "コ");
-		//
-		//		} else {
-		categoryRepository.deleteById(id);
-		//		}
-		//
-		//		redirectAttributes.addFlashAttribute("err1", err1);
-		//		redirectAttributes.addFlashAttribute("err2", err2);
+		if (taskList.size() != 0) {
+
+			//			出力先で警告発生
+			//			errList.add("カテゴリ　：" + category.getName() + "　に属したToDoがあるため削除できません");
+			//			errList.add("対象ToDo：" + (int) taskList.size() + "コ");
+			//			redirectAttributes.addFlashAttribute("errList", errList);
+
+			err1 = ("カテゴリ：【" + category.getName() + "】　に属したToDoがあるため削除できません");
+			err2 = ("対象ToDo：" + (int) taskList.size() + "コ");
+
+		} else {
+			categoryRepository.deleteById(id);
+		}
+
+		redirectAttributes.addFlashAttribute("err1", err1);
+		redirectAttributes.addFlashAttribute("err2", err2);
+
+		//		テストコード　動く
+		//		redirectAttributes.addFlashAttribute("abc", "ドラえもん");
 
 		return "redirect:/category";
 

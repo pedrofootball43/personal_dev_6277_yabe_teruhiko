@@ -15,7 +15,6 @@
 		<li th:each = "err : ${errs}" th:text = "${err}"></li>
 	</ul>
 
-	<br>
 
 	<form action = "/category/add" method = "get">
 		<button>新規登録</button>
@@ -27,7 +26,7 @@
 			<th>更新</th>
 			<th>削除</th>
 		</tr>
-		<tr th:each = "category : ${categories}">
+		<tr th:each = "category, start : ${categories}">
 			<th th:text = "${category.name}"></th>
 			<th>
 				<form th:action = "'/category/' + ${category.id} + '/edit'" method = "get">
