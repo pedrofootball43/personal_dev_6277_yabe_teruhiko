@@ -6,11 +6,8 @@
 </head>
 <body>
 	<h1>ToDo一覧</h1>
-
-	こんにちは、[[${@account.name}]]さん
 	
-
-	<a href = "/login">ログアウト</a>
+	<span th:replace = "greetingSpan"></span>
 	
 	<br>
 	
@@ -42,22 +39,25 @@
 			<th>ToDo一覧</th>
 			<th>カテゴリー</th>
 			<th>期日</th>
-			<th>更新</th>
+<!--			<th>更新</th>-->
 			<th>完了</th>
 		</tr>
 		
 		<tr th:each = "t, start : ${tasks}">
 			<td th:text = "${start.count}"></td>
-			<td th:text = "${t.task}"></td>
+<!--			<td th:text = "${t.task}"></td>-->
+			<td>
+				<a th:href = "'/taskList/' + ${t.id} + '/edit'" th:text = "${t.task}"></a>
+			</td>
 			
-			<td th:text = "${t.categoryId}"></td>
+			<td th:text = "${t.categoryName}"></td>
 			
 			<td th:text = "${t.deadline}"></td>
-			<td>
-				<form th:action = "'/taskList/' + ${t.id} + '/edit'" method = "get">
-					<button>更新</button>
-				</form>
-			</td>
+<!--			<td>-->
+<!--				<form th:action = "'/taskList/' + ${t.id} + '/edit'" method = "get">-->
+<!--					<button>更新</button>-->
+<!--				</form>-->
+<!--			</td>-->
 			
 			<td>
 				<form th:action = "'/taskList/' + ${t.id} + '/delete'" method = "post">

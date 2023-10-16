@@ -7,9 +7,7 @@
 <body>
 	<h1>ToDo更新</h1>
 	
-	こんにちは、[[${@account.name}]]さん
-	
-	<a href = "/login">ログアウト</a>
+	<span th:replace = "greetingSpan"></span>
 	
 	<ul style="list-style: none; color: red;">
 		<li th:each = "err : ${errs}" th:text = "${err}"></li>
@@ -20,18 +18,25 @@
 			<tr>
 				<th>ToDo</th>
 				<td>
-					<th:block th:unless = "${err2}">
+					<th:block th:if = "${errKind == null}">
 						<input 
 							type = "text" 
 							name = "task" 
 							th:value = "${t.task}">
 					</th:block>
 					
-					<th:block th:if = "${err2}">
+					<th:block th:if = "${errKind == 1}">
 						<input 
 							type = "text" 
 							name = "task" 
-							value = "">
+							th:value = "">
+					</th:block>
+					
+					<th:block th:if = "${errKind == 2}">
+						<input 
+							type = "text" 
+							name = "task" 
+							th.value = "hoge">
 					</th:block>
 				</td>
 			</tr>
@@ -39,14 +44,21 @@
 			<tr>
 				<th>詳細</th>
 				<td>
-					<th:block th:unless = "${err2}">
+					<th:block th:if = "${errKind == null}">
 						<input 
 							type = "text" 
 							name = "taskDetail" 
 							th:value = "${t.taskDetail}">
 					</th:block>
 					
-					<th:block th:if = "${err2}">
+					<th:block th:if = "${errKind == 1}">
+						<input 
+							type = "text" 
+							name = "taskDetail" 
+							th:value = "${taskDetail}">
+					</th:block>
+					
+					<th:block th:if = "${errKind == 2}">
 						<input 
 							type = "text" 
 							name = "taskDetail" 
@@ -59,16 +71,25 @@
 				<th>カテゴリー</th>
 				<td>
 					<select name = "categoryId">
-						<th:block th:unless = "${err2}">
+						<th:block th:if = "${errKind == null}">
 							<option 
 								th:each = "category : ${categories}" 
 								th:text = "${category.name}" 
 								th:value = "${category.id}"
-								th:selected = "${category.id == selectedValue}">
+								th:selected = "${category.id == t.categoryId}">
 							</option>
 						</th:block>
 						
-						<th:block th:if = "${err2}">
+						<th:block th:if = "${errKind == 1}">
+							<option 
+								th:each = "category : ${categories}" 
+								th:text = "${category.name}" 
+								th:value = "${category.id}"
+								th:selected = "${category.id == categoryId}">
+							</option>
+						</th:block>
+						
+						<th:block th:if = "${errKind == 2}">
 							<option 
 								th:each = "category : ${categories}" 
 								th:text = "${category.name}" 
@@ -83,17 +104,36 @@
 			<tr>
 				<th>期日</th>
 				<td>
-					<input 
-						type = "date" 
-						name = "deadline" 
-						th:value = "${deadline}">
-<!--						th:value = "${t.deadline}"-->
+					<th:block th:if = "${errKind == null}">
+						<input 
+							type = "date" 
+							name = "deadline" 
+							th:value = "${deadline}">
+					</th:block>
+					
+					<th:block th:if = "${errKind == 1}">
+						<input 
+							type = "date" 
+							name = "deadline" 
+							th:value = "${deadlineFlash}">
+					</th:block>
+					
+					<th:block th:if = "${errKind == 2}">
+						<input 
+							type = "date" 
+							name = "deadline" 
+							th:value = "${deadlineFlash}">
+					</th:block>
 				</td>
 			</tr>
 		</table>
 		
-		<button>この内容で更新</button>
+		<button>更新</button>
 		
+	</form>
+	
+	<form th:action = "'/taskList/' + ${t.id} + '/edit'" method="get">
+			<button>リセット</button>
 	</form>
 
 	<a href = "/taskList">一覧へ戻る</a>

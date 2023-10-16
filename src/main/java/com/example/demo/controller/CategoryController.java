@@ -35,24 +35,11 @@ public class CategoryController {
 	public String index(
 			Model model) {
 
-		List<String> errList = new ArrayList<>();
-
-		//		List<Category> categoryList = categoryRepository.findAll();
 		List<Category> categoryList = categoryRepository.findAllByOrderByIdAsc();
 		model.addAttribute("categories", categoryList);
 
-		//		テストコード　動く
-		//		String abc = (String) model.getAttribute("abc");
-		//		model.addAttribute("abc", abc);
-
-		String err1 = (String) model.getAttribute("err1");
-		String err2 = (String) model.getAttribute("err2");
-		errList.add(err1);
-		errList.add(err2);
-
-		//		警告が出てしまう
-		//		List<String> errList =  (List<String>)model.getAttribute("errList");
-
+		@SuppressWarnings("unchecked")
+		List<String> errList = (List<String>) model.getAttribute("errList");
 		model.addAttribute("errs", errList);
 
 		return "category";
@@ -63,6 +50,7 @@ public class CategoryController {
 	@GetMapping("/category/add")
 	public String create() {
 		return "categoryAdd";
+
 	}
 
 	//	カテゴリー更新画面　表示
@@ -72,36 +60,71 @@ public class CategoryController {
 			Model model) {
 
 		Category category = categoryRepository.findById(id).get();
-
 		model.addAttribute("category", category);
 
+		@SuppressWarnings("unchecked")
+		List<String> errs = (List<String>) model.getAttribute("errList");
+		Integer errKind = (Integer) model.getAttribute("errKind");
+		String categoryName = (String) model.getAttribute("categoryName");
+
+		model.addAttribute("errs", errs);
+		model.addAttribute("errKind", errKind);
+		model.addAttribute("categoryName", categoryName);
+
 		return "categoryEdit";
+
 	}
 
+	//	入力情報　保持　未実装
 	//	カテゴリー追加　実行
 	@PostMapping("/category/add")
 	public String add(
 			@RequestParam(name = "name", defaultValue = "") String name) {
 
 		Category category = new Category(name);
-
 		categoryRepository.save(category);
 
 		return "redirect:/category";
 
 	}
 
+	//	月・日付　一桁の時内容反映されない
 	//	カテゴリー更新　実行
 	@PostMapping("/category/{id}/edit")
 	public String update(
 			@PathVariable("id") Integer id,
-			@RequestParam(name = "name", defaultValue = "") String name) {
+			@RequestParam(name = "name", defaultValue = "") String name,
+			RedirectAttributes redirectAttributes) {
 
-		Category category = new Category(id, name);
+		String result = "redirect:/category";
+		Integer errKind = 0;
 
-		categoryRepository.save(category);
+		List<String> errList = new ArrayList<>();
+		List<Category> checkCategories = categoryRepository.findByName(name);
 
-		return "redirect:/category";
+		if (name.equals("")) {
+			errList.add("【カテゴリー名】　は入力必須です");
+			errKind = 1;
+
+		} else if (checkCategories.size() != 0) {
+			errList.add("カテゴリー名：【" + name + "】　は既に使われています");
+			redirectAttributes.addFlashAttribute("categoryName", name);
+			errKind = 2;
+
+		}
+
+		if (errList.size() != 0) {
+			redirectAttributes.addFlashAttribute("errList", errList);
+			redirectAttributes.addFlashAttribute("errKind", errKind);
+			result = "redirect:/category/{id}/edit";
+
+		} else {
+			Category category = new Category(id, name);
+			categoryRepository.save(category);
+
+		}
+
+		return result;
 
 	}
 
@@ -111,35 +134,21 @@ public class CategoryController {
 			@PathVariable("id") Integer id,
 			RedirectAttributes redirectAttributes) {
 
-		String err1 = "";
-		String err2 = "";
-
 		Integer userId = account.getUserId();
-
-		//		List<String> errList = new ArrayList<>();
-		List<Task> taskList = taskRepository.findByCategoryIdAndUserId(id, userId);
-
 		Category category = categoryRepository.findById(id).get();
 
+		List<String> errList = new ArrayList<>();
+		List<Task> taskList = taskRepository.findByCategoryIdAndUserId(id, userId);
+
 		if (taskList.size() != 0) {
-
-			//			出力先で警告発生
-			//			errList.add("カテゴリ　：" + category.getName() + "　に属したToDoがあるため削除できません");
-			//			errList.add("対象ToDo：" + (int) taskList.size() + "コ");
-			//			redirectAttributes.addFlashAttribute("errList", errList);
-
-			err1 = ("カテゴリ：【" + category.getName() + "】　に属したToDoがあるため削除できません");
-			err2 = ("対象ToDo：" + (int) taskList.size() + "コ");
+			errList.add("カテゴリ　：" + category.getName() + "　に属したToDoがあるため削除できません");
+			errList.add("対象ToDo：" + (int) taskList.size() + "コ");
+			redirectAttributes.addFlashAttribute("errList", errList);
 
 		} else {
 			categoryRepository.deleteById(id);
+
 		}
-
-		redirectAttributes.addFlashAttribute("err1", err1);
-		redirectAttributes.addFlashAttribute("err2", err2);
-
-		//		テストコード　動く
-		//		redirectAttributes.addFlashAttribute("abc", "ドラえもん");
 
 		return "redirect:/category";
 

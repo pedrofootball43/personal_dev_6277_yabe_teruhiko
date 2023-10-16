@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tasks")
@@ -32,6 +34,9 @@ public class Task {
 
 	//	private String deadline;
 	private LocalDate deadline;
+
+	@Transient
+	private final static DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
 	//	コンストラクタ
 	//	デフォルト
@@ -116,10 +121,12 @@ public class Task {
 
 	public String getDeadline() {
 
-		//		return deadline;
-		return deadline.getYear() + "/" +
-				deadline.getMonthValue() + "/" +
-				deadline.getDayOfMonth();
+		//		return deadline.getYear() + "/" +
+		//				deadline.getMonthValue() + "/" +
+		//				deadline.getDayOfMonth();
+
+		return deadline.format(FMT);
+
 	}
 
 	//	public void setDeadline(LocalDate deadline) {

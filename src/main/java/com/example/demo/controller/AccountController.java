@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,12 +36,28 @@ public class AccountController {
 		session.invalidate();
 
 		return "login";
+
 	}
 
 	//	ユーザー新規登録画面　表示
 	@GetMapping("/userAdd")
 	public String userAdd() {
 		return "userAdd";
+
+	}
+
+	//	ユーザー情報変更画面　表示
+	@GetMapping("/user/{userId}/edit")
+	public String edit(
+			@PathVariable("userId") Integer userId,
+			Model model) {
+
+		User user = userRepository.findById(userId).get();
+
+		model.addAttribute("user", user);
+
+		return "userEdit";
+
 	}
 
 	//	ログイン　実行
@@ -48,12 +65,9 @@ public class AccountController {
 	public String login(
 			@RequestParam(name = "loginId", defaultValue = "") String loginId,
 			@RequestParam(name = "password", defaultValue = "") String password,
-			//			@ModelAttribute("complete") String complete,
 			Model model) {
 
 		String result = "login";
-
-		//		model.addAttribute("msg", complete);
 
 		List<String> errList = new ArrayList<>();
 		List<User> userList = userRepository.findByLoginIdAndPassword(loginId, password);
@@ -62,24 +76,14 @@ public class AccountController {
 			User user = userList.get(0);
 			account.setName(user.getName());
 			account.setUserId(user.getId());
-			result = "redirect:/taskList";
 
-			//		} else if (loginId.equals("") && password.equals("")) {
-			//			errList.add("ユーザーIDが未入力です");
-			//			errList.add("パスワードが未入力です");
-			//
-			//		} else if (loginId.equals("")) {
-			//			errList.add("ユーザーIDが未入力です");
-			//
-			//		} else if (password.equals("")) {
-			//			errList.add("パスワードが未入力です");
+			result = "redirect:/taskList";
 
 		} else {
 			errList.add("ユーザーIDとパスワードが一致しません");
+			model.addAttribute("errs", errList);
 
 		}
-
-		model.addAttribute("errs", errList);
 
 		return result;
 
@@ -91,7 +95,6 @@ public class AccountController {
 			@RequestParam(name = "name", defaultValue = "") String name,
 			@RequestParam(name = "loginId", defaultValue = "") String loginId,
 			@RequestParam(name = "password", defaultValue = "") String password,
-			//			,RedirectAttributes redirectAttributes
 			Model model) {
 
 		String result = "userAdd";
@@ -100,17 +103,23 @@ public class AccountController {
 		List<User> users = userRepository.findByLoginId(loginId);
 
 		if (name.equals("")) {
-			errList.add("ユーザーネームは入力必須項目です");
+			//			"".equals(name)
+			//			name.isEmpty()
+			errList.add("【ユーザーネーム】　は入力必須項目です");
+
 		}
 
 		if (loginId.equals("")) {
-			errList.add("ユーザーIDは入力必須項目です");
+			errList.add("【ユーザーID】　は入力必須項目です");
+
 		} else if (users.size() != 0) {
-			errList.add("このユーザーIDは使用されています");
+			errList.add("ユーザーID：【" + loginId + "】　は使用されています");
+
 		}
 
 		if (password.equals("")) {
-			errList.add("パスワードは入力必須項目です");
+			errList.add("【パスワード】　は入力必須項目です");
+
 		}
 
 		if (errList.size() == 0) {
@@ -125,7 +134,6 @@ public class AccountController {
 			model.addAttribute("loginId", loginId);
 
 		}
-		//		redirectAttributes.addFlashAttribute("complete", "ユーザー登録が完了しました");
 
 		return result;
 

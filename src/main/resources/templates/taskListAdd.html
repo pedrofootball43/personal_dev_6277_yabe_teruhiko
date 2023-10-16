@@ -7,9 +7,7 @@
 <body>
 	<h1>ToDo登録</h1>
 	
-	こんにちは、[[${@account.name}]]さん
-	
-	<a href = "/login">ログアウト</a>
+	<span th:replace = "greetingSpan"></span>
 	
 	<ul style="list-style: none; color: red;">
 		<li th:each = "err : ${errs}" th:text = "${err}"></li>

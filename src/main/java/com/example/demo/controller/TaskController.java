@@ -16,9 +16,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Task;
+import com.example.demo.entity.VTask;
 import com.example.demo.model.Account;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.TaskRepository;
+import com.example.demo.repository.VTaskRepository;
 
 @Controller
 public class TaskController {
@@ -30,6 +32,9 @@ public class TaskController {
 	CategoryRepository categoryRepository;
 
 	@Autowired
+	VTaskRepository vtaskRepository;
+
+	@Autowired
 	Account account;
 
 	//	ToDo一覧画面　表示
@@ -38,26 +43,26 @@ public class TaskController {
 			@RequestParam(name = "categoryId", defaultValue = "0") Integer categoryId,
 			Model model) {
 
-		List<Task> taskList = null;
 		Integer userId = account.getUserId();
 
 		List<Category> categoryList = categoryRepository.findAll();
 		model.addAttribute("categories", categoryList);
 
+		//		view
+		List<VTask> vtaskList = null;
+
 		if (categoryId != 0) {
-			//			taskList = taskRepository.findByCategoryIdAndUserIdOrderByIdAsc(categoryId, userId);
-			taskList = taskRepository.findByCategoryIdAndUserId(categoryId, userId);
+			//			view
+			vtaskList = vtaskRepository.findByCategoryIdAndUserIdOrderById(categoryId, userId);
+
 		} else {
 			model.addAttribute("categoryId", "");
-			taskList = taskRepository.findByUserId(userId);
+			//			view
+			vtaskList = vtaskRepository.findByUserIdOrderById(userId);
 
-			//			taskList = taskRepository.findByUserIdOrderByIdAsc(userId);
-			//			taskList = taskRepository.findAllByOrderByIdAsc();
 		}
 
-		//		taskList = taskRepository.findAll();
-
-		model.addAttribute("tasks", taskList);
+		model.addAttribute("tasks", vtaskList);
 
 		return "taskList";
 	}
@@ -66,17 +71,11 @@ public class TaskController {
 	@GetMapping("/taskList/add")
 	public String create(Model model) {
 
-		List<String> errList = new ArrayList<>();
-
 		List<Category> categoryList = categoryRepository.findAll();
 		model.addAttribute("categories", categoryList);
 
-		String err1 = (String) model.getAttribute("err1");
-		String err2 = (String) model.getAttribute("err2");
-
-		errList.add(err1);
-		errList.add(err2);
-
+		@SuppressWarnings("unchecked")
+		List<String> errList = (List<String>) model.getAttribute("errList");
 		model.addAttribute("errs", errList);
 
 		return "taskListAdd";
@@ -88,34 +87,33 @@ public class TaskController {
 			@PathVariable("id") Integer id,
 			Model model) {
 
-		List<String> errList = new ArrayList<>();
-		String err1 = (String) model.getAttribute("err1");
-		String err2 = (String) model.getAttribute("err2");
-		errList.add(err1);
-		errList.add(err2);
-		model.addAttribute("errs", errList);
-
 		List<Category> categoryList = categoryRepository.findAll();
 		model.addAttribute("categories", categoryList);
 
 		Task t = taskRepository.findById(id).get();
 		model.addAttribute("t", t);
 
-		model.addAttribute("selectedValue", t.getCategoryId());
-
 		String deadline = t.getDeadline().replaceAll("/", "-");
 		model.addAttribute("deadline", deadline);
 
+		@SuppressWarnings("unchecked")
+		List<String> errList = (List<String>) model.getAttribute("errList");
+
+		Integer errKind = (Integer) model.getAttribute("errKind");
 		String taskDetail = (String) model.getAttribute("taskDetail");
 		Integer categoryId = (Integer) model.getAttribute("categoryId");
-		//		LocalDate deadlineFlash = (LocalDate) model.getAttribute("deadline");
+		String deadlineFlash = (String) model.getAttribute("deadlineFlash");
+		String currentTask = (String) model.getAttribute("currentTask");
+
+		model.addAttribute("errs", errList);
+		model.addAttribute("errKind", errKind);
 		model.addAttribute("taskDetail", taskDetail);
 		model.addAttribute("categoryId", categoryId);
-		//		model.addAttribute("deadline", deadlineFlash);
-
-		model.addAttribute("err2", err2);
+		model.addAttribute("deadlineFlash", deadlineFlash);
+		model.addAttribute("currentTask", currentTask);
 
 		return "taskListEdit";
+
 	}
 
 	//	リスト登録　実行
@@ -131,26 +129,30 @@ public class TaskController {
 		String result = "redirect:/taskList/add";
 		Integer userId = account.getUserId();
 
-		String err1 = "以下の項目は入力必須です";
-		String err2 = "";
-
-		//		List<String> errList = new ArrayList<>();
-		//		errList.add("以下の項目は入力必須です");
+		List<String> errList = new ArrayList<>();
 
 		if (task.equals("")) {
-			//			errList.add("【ToDo】");
-			err2 = "【ToDo】";
+			errList.add("【ToDo】　は入力必須です");
+
 		}
 
-		if (err2.equals("")) {
+		if (deadline != null && deadline.isBefore(LocalDate.now())) {
+			LocalDate lToday = LocalDate.now();
+			String sToday = lToday.getYear() + "/" + lToday.getMonthValue() + "/" + lToday.getDayOfMonth();
+			errList.add("【期日】　は本日（" + sToday + ")より後を選択してください");
+
+		}
+
+		if (errList.size() == 0) {
 			Task t = new Task(userId, categoryId, task, detail, deadline);
 			taskRepository.save(t);
-			result = "redirect:/taskList";
-		}
 
-		//		redirectAttributes.addFlashAttribute("errList", errList);
-		redirectAttributes.addFlashAttribute("err1", err1);
-		redirectAttributes.addFlashAttribute("err2", err2);
+			result = "redirect:/taskList";
+
+		} else {
+			redirectAttributes.addFlashAttribute("errList", errList);
+
+		}
 
 		return result;
 
@@ -158,7 +160,7 @@ public class TaskController {
 
 	//	リスト更新　実行
 	@PostMapping("/taskList/{id}/edit")
-	public String edit(
+	public String update(
 			@PathVariable("id") Integer id,
 			@RequestParam(name = "task", defaultValue = "") String task,
 			@RequestParam(name = "taskDetail", defaultValue = "") String taskDetail,
@@ -168,32 +170,40 @@ public class TaskController {
 			RedirectAttributes redirectAttributes) {
 
 		String result = "redirect:/taskList/{id}/edit";
+		Integer errKind = 0;
 		Integer userId = account.getUserId();
 
-		String err1 = "以下の項目は入力必須です";
-		String err2 = "";
-
-		//		List<String> errList = new ArrayList<>();
-		//		errList.add("以下の項目は入力必須です");
+		List<String> errList = new ArrayList<>();
 
 		if (task.equals("")) {
-			//			errList.add("【ToDo】");
-			err2 = "【ToDo】";
+			errList.add("【ToDo】　は入力必須です");
+			errKind = 1;
 		}
 
-		if (err2.equals("")) {
+		if (deadline != null && deadline.isBefore(LocalDate.now())) {
+			LocalDate lToday = LocalDate.now();
+			String sToday = lToday.getYear() + "/" + lToday.getMonthValue() + "/" + lToday.getDayOfMonth();
+			errList.add("【期日】　は本日（" + sToday + ")より後を選択してください");
+			errKind = 2;
+
+		}
+
+		if (errList.size() == 0) {
 			Task t = new Task(id, userId, categoryId, task, taskDetail, deadline);
 			taskRepository.save(t);
+
 			result = "redirect:/taskList";
+
+		} else {
+			String sDeadline = deadline.getYear() + "/" + deadline.getMonthValue() + "/" + deadline.getDayOfMonth();
+			redirectAttributes.addFlashAttribute("deadlineFlash", sDeadline.replaceAll("/", "-"));
+			redirectAttributes.addFlashAttribute("taskDetail", taskDetail);
+			redirectAttributes.addFlashAttribute("categoryId", categoryId);
+			redirectAttributes.addFlashAttribute("currentTask", task);
+			redirectAttributes.addFlashAttribute("errKind", errKind);
+			redirectAttributes.addFlashAttribute("errList", errList);
+
 		}
-
-		//		redirectAttributes.addFlashAttribute("errList", errList);
-		redirectAttributes.addFlashAttribute("err1", err1);
-		redirectAttributes.addFlashAttribute("err2", err2);
-
-		redirectAttributes.addFlashAttribute("taskDetail", taskDetail);
-		redirectAttributes.addFlashAttribute("categoryId", categoryId);
-		//		redirectAttributes.addFlashAttribute("deadline", deadline);
 
 		return result;
 

@@ -1,0 +1,8 @@
+<span>
+	こんにちは、[[${@account.name}]]さん
+	<a href = "/login">ログアウト</a>
+	<a th:href = "'/user/' + ${@account.userId} + '/edit/'">アカウント情報変更</a>
+<!--	<a th:href = "'/user?userId=' + ${@account.userId} + '/edit/'">アカウント情報変更</a>-->
+
+	
+</span>

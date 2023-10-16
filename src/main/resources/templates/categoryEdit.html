@@ -7,7 +7,7 @@
 <body>
 	<h1>カテゴリー編集</h1>
 	
-	こんにちは、[[${@account.name}]]さん
+	<span th:replace = "greetingSpan"></span>
 	
 	<ul style="list-style: none; color: red;">
 		<li th:each = "err : ${errs}" th:text = "${err}"></li>
@@ -18,12 +18,22 @@
 			<tr>
 				<th>カテゴリー名</th>
 				<th>
-					<input type = "text" name = "name" th:value = "${category.name}">
+					<th:block th:if ="${errKind == null}">
+						<input type = "text" name = "name" th:value = "${category.name}">
+					</th:block>
+					
+					<th:block th:if ="${errKind == 1}">
+						<input type = "text" name = "name" th:value = "${name}">
+					</th:block>
+					
+					<th:block th:if ="${errKind == 2}">
+						<input type = "text" name = "name" th:value = "${categoryName}">
+					</th:block>
 				</th>
 			</tr>
 		</table>
 		
-		<button>この内容で更新</button>
+		<button>更新</button>
 		
 	</form>
 	

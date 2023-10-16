@@ -1,6 +1,8 @@
+DROP VIEW IF EXISTS v_tasks;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS tasks;
+
 
 CREATE TABLE users
 (
@@ -26,3 +28,19 @@ CREATE TABLE tasks
     /*deadline TEXT*/
     deadline DATE
 );
+
+CREATE VIEW v_tasks AS 
+(
+	SELECT
+		t.id,
+		t.user_id,
+		t.category_id,
+		c.name AS category_name,
+		t.task,
+		t.task_detail,
+		t.deadline
+	FROM tasks t
+	JOIN categories c
+	ON t.category_id = c.id
+);
+
