@@ -17,53 +17,29 @@
 		<table border = "1">
 			<tr>
 				<th>ToDo</th>
-				<td>
-					<th:block th:if = "${errKind == null}">
-						<input 
-							type = "text" 
-							name = "task" 
-							th:value = "${t.task}">
-					</th:block>
-					
-					<th:block th:if = "${errKind == 1}">
-						<input 
-							type = "text" 
-							name = "task" 
-							th:value = "">
-					</th:block>
-					
-					<th:block th:if = "${errKind == 2}">
-						<input 
-							type = "text" 
-							name = "task" 
-							th.value = "hoge">
-					</th:block>
+				<td th:switch = "${errKind}">
+						<!--ToDo無し-->
+						<input type = "text" name = "task" th:case = "1" th:value = "${task}">
+
+						<!--期日過去-->
+						<input type = "text" name = "task" th:case = "2" th:value = "${currentTask}">
+
+						<!--ToDo無し・期日過去-->
+						<input type = "text" name = "task" th:case = "3" th:value = "${task}">
+						
+						<!--初回-->
+						<input type = "text" name = "task" th:case = "*" th:value = "${t.task}">
 				</td>
 			</tr>
 			
 			<tr>
 				<th>詳細</th>
-				<td>
-					<th:block th:if = "${errKind == null}">
-						<input 
-							type = "text" 
-							name = "taskDetail" 
-							th:value = "${t.taskDetail}">
-					</th:block>
+				<td th:switch = "${errKind}">
+						<!--初回-->
+						<input type = "text" name = "taskDetail" th:case = "null" th:value = "${t.taskDetail}">
 					
-					<th:block th:if = "${errKind == 1}">
-						<input 
-							type = "text" 
-							name = "taskDetail" 
-							th:value = "${taskDetail}">
-					</th:block>
-					
-					<th:block th:if = "${errKind == 2}">
-						<input 
-							type = "text" 
-							name = "taskDetail" 
-							th:value = "${taskDetail}">
-					</th:block>
+						<!--ToDo無し,期日過去,ToDo無し・期日過去-->
+						<input type = "text" name = "taskDetail" th:case = "*" th:value = "${taskDetail}">
 				</td>
 			</tr>
 			
@@ -71,25 +47,17 @@
 				<th>カテゴリー</th>
 				<td>
 					<select name = "categoryId">
+						<!--初回-->
 						<th:block th:if = "${errKind == null}">
-							<option 
+							<option
 								th:each = "category : ${categories}" 
 								th:text = "${category.name}" 
 								th:value = "${category.id}"
 								th:selected = "${category.id == t.categoryId}">
 							</option>
 						</th:block>
-						
-						<th:block th:if = "${errKind == 1}">
-							<option 
-								th:each = "category : ${categories}" 
-								th:text = "${category.name}" 
-								th:value = "${category.id}"
-								th:selected = "${category.id == categoryId}">
-							</option>
-						</th:block>
-						
-						<th:block th:if = "${errKind == 2}">
+						<!--ToDo無し,期日過去,ToDo無し・期日過去-->
+						<th:block th:if = "${errKind != null}">
 							<option 
 								th:each = "category : ${categories}" 
 								th:text = "${category.name}" 
@@ -103,28 +71,22 @@
 			
 			<tr>
 				<th>期日</th>
-				<td>
-					<th:block th:if = "${errKind == null}">
-						<input 
-							type = "date" 
-							name = "deadline" 
-							th:value = "${deadline}">
-					</th:block>
+				<td th:switch = "${errKind}">
+						<!--ToDo無し-->
+						<input type = "date" name = "deadline" th:case = "1" th:value = "${deadlineFlash}">
 					
-					<th:block th:if = "${errKind == 1}">
-						<input 
-							type = "date" 
-							name = "deadline" 
-							th:value = "${deadlineFlash}">
-					</th:block>
-					
-					<th:block th:if = "${errKind == 2}">
-						<input 
-							type = "date" 
-							name = "deadline" 
-							th:value = "${deadlineFlash}">
-					</th:block>
+						<!--期日過去,ToDo無し・期日過去-->
+						<input type = "date" name = "deadline" th:case = "2" th:value = "${deadlineFlash}">
+						<input type = "date" name = "deadline" th:case = "3" th:value = "${deadlineFlash}">
+
+						<!--初回-->
+						<input type = "date" name = "deadline" th:case = "*" th:value = "${t.deadline}">
 				</td>
+			</tr>
+			
+			<tr>
+				<th>残り日数</th>
+				<td th:text = "${dayNum}"></td>
 			</tr>
 		</table>
 		

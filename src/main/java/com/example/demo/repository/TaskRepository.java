@@ -8,18 +8,10 @@ import com.example.demo.entity.Task;
 
 public interface TaskRepository extends JpaRepository<Task, Integer> {
 
+	//	カテゴリーID・ユーザーID　カテゴリ検索
 	List<Task> findByCategoryIdAndUserId(Integer categoryId, Integer userId);
 
+	//	ユーザーID　一覧表示
 	List<Task> findByUserId(Integer userId);
-
-	//	List<Task> findByCategoryIdAndUserIdByOrderByIdAsc(Integer categoryId, Integer userId);
-	//
-	//	List<Task> findByCategoryIdAndUserIdOrderByIdAsc(Integer categoryId, Integer userId);
-	//
-	//	List<Task> findByUserIdByOrderByIdAsc(Integer userId);
-	//
-	//	List<Task> findByUserIdOrderByIdAsc(Integer userId);
-
-	List<Task> findAllByOrderByIdAsc();
 
 }

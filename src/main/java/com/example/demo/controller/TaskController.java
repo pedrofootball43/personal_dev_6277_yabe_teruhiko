@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,27 +43,51 @@ public class TaskController {
 	@GetMapping("/taskList")
 	public String index(
 			@RequestParam(name = "categoryId", defaultValue = "0") Integer categoryId,
+			@RequestParam(name = "sort", defaultValue = "") String[] sort,
 			Model model) {
 
 		Integer userId = account.getUserId();
 
+		//		-----カテゴリプルダウン　情報取得・出力-----
 		List<Category> categoryList = categoryRepository.findAll();
 		model.addAttribute("categories", categoryList);
 
-		//		view
+		//		-----検索・並び替え-----
+		//		出力用タスクリスト(空)　作成
 		List<VTask> vtaskList = null;
 
+		//		検索：有
 		if (categoryId != 0) {
-			//			view
-			vtaskList = vtaskRepository.findByCategoryIdAndUserIdOrderById(categoryId, userId);
-
+			if (sort.length == 0) {
+				vtaskList = vtaskRepository.findByCategoryIdAndUserIdOrderById(categoryId, userId);
+			} else {
+				if ("deadline".equals(sort[0])) {
+					//		並び替え：期日
+					vtaskList = vtaskRepository.findByCategoryIdAndUserIdOrderByDeadline(categoryId, userId);
+				} else {
+					//		並び替え：無
+					vtaskList = vtaskRepository.findByCategoryIdAndUserIdOrderById(categoryId, userId);
+				}
+			}
+			//		検索：無
 		} else {
-			model.addAttribute("categoryId", "");
-			//			view
-			vtaskList = vtaskRepository.findByUserIdOrderById(userId);
-
+			if (sort.length == 2) {
+				//		並び替え：期日・カテゴリ
+				vtaskList = vtaskRepository.findByUserIdOrderByCategoryIdAscDeadlineAsc(userId);
+			} else if (sort.length == 1) {
+				if ("deadline".equals(sort[0])) {
+					//		並び替え：期日
+					vtaskList = vtaskRepository.findByUserIdOrderByDeadline(userId);
+				} else {
+					//		並び替え：カテゴリ
+					vtaskList = vtaskRepository.findByUserIdOrderByCategoryId(userId);
+				}
+			} else {
+				//		指定なし
+				vtaskList = vtaskRepository.findByUserIdOrderById(userId);
+			}
 		}
-
+		//		タスクリスト　出力
 		model.addAttribute("tasks", vtaskList);
 
 		return "taskList";
@@ -71,9 +97,11 @@ public class TaskController {
 	@GetMapping("/taskList/add")
 	public String create(Model model) {
 
+		//		-----カテゴリプルダウン　情報取得・出力-----
 		List<Category> categoryList = categoryRepository.findAll();
 		model.addAttribute("categories", categoryList);
 
+		//		-----エラー発生　情報取得・出力-----
 		@SuppressWarnings("unchecked")
 		List<String> errList = (List<String>) model.getAttribute("errList");
 		model.addAttribute("errs", errList);
@@ -87,15 +115,26 @@ public class TaskController {
 			@PathVariable("id") Integer id,
 			Model model) {
 
+		//		-----カテゴリプルダウン　情報取得・出力-----
 		List<Category> categoryList = categoryRepository.findAll();
 		model.addAttribute("categories", categoryList);
 
 		Task t = taskRepository.findById(id).get();
 		model.addAttribute("t", t);
 
-		String deadline = t.getDeadline().replaceAll("/", "-");
-		model.addAttribute("deadline", deadline);
+		//		-----残り日数　算出・出力-----
+		final String FORMAT = "yyyy-MM-dd";
+		LocalDate now = LocalDate.now();
+		LocalDate deadline = LocalDate.parse(t.getDeadline(), DateTimeFormatter.ofPattern(FORMAT));
+		long dayNum = ChronoUnit.DAYS.between(now, deadline);
 
+		if (dayNum < 0) {
+			dayNum = 0;
+		}
+
+		model.addAttribute("dayNum", dayNum);
+
+		//		-----エラー発生　情報取得・出力-----
 		@SuppressWarnings("unchecked")
 		List<String> errList = (List<String>) model.getAttribute("errList");
 
@@ -116,6 +155,9 @@ public class TaskController {
 
 	}
 
+	////	完了リスト　表示
+	//	@GetMapping("/taskList/finish")
+
 	//	リスト登録　実行
 	@PostMapping("/taskList/add")
 	public String add(
@@ -129,13 +171,16 @@ public class TaskController {
 		String result = "redirect:/taskList/add";
 		Integer userId = account.getUserId();
 
+		//		-----入力チェック-----
 		List<String> errList = new ArrayList<>();
 
+		//		タスク有無
 		if (task.equals("")) {
 			errList.add("【ToDo】　は入力必須です");
 
 		}
 
+		//		期日過去
 		if (deadline != null && deadline.isBefore(LocalDate.now())) {
 			LocalDate lToday = LocalDate.now();
 			String sToday = lToday.getYear() + "/" + lToday.getMonthValue() + "/" + lToday.getDayOfMonth();
@@ -143,6 +188,7 @@ public class TaskController {
 
 		}
 
+		//		エラー有無
 		if (errList.size() == 0) {
 			Task t = new Task(userId, categoryId, task, detail, deadline);
 			taskRepository.save(t);
@@ -166,28 +212,35 @@ public class TaskController {
 			@RequestParam(name = "taskDetail", defaultValue = "") String taskDetail,
 			@RequestParam(name = "categoryId", defaultValue = "") Integer categoryId,
 			//			@RequestParam(name = "deadline", defaultValue = "") String deadline
-			@RequestParam(name = "deadline", defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate deadline,
+			@RequestParam(name = "deadline", defaultValue = "9999-12-31") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate deadline,
 			RedirectAttributes redirectAttributes) {
 
 		String result = "redirect:/taskList/{id}/edit";
 		Integer errKind = 0;
 		Integer userId = account.getUserId();
 
+		//		-----入力チェック-----
 		List<String> errList = new ArrayList<>();
 
+		//		タスク有無
 		if (task.equals("")) {
 			errList.add("【ToDo】　は入力必須です");
-			errKind = 1;
+			errKind += 1;
 		}
 
-		if (deadline != null && deadline.isBefore(LocalDate.now())) {
+		//		期日過去
+		LocalDate chechDate = LocalDate.of(9999, 12, 31);
+		if (deadline.isEqual(chechDate)) {
+			errList.add("【期日】　は入力必須です");
+			//			errKind += 2;
+		} else if (deadline.isBefore(LocalDate.now())) {
 			LocalDate lToday = LocalDate.now();
 			String sToday = lToday.getYear() + "/" + lToday.getMonthValue() + "/" + lToday.getDayOfMonth();
 			errList.add("【期日】　は本日（" + sToday + ")より後を選択してください");
-			errKind = 2;
-
+			errKind += 2;
 		}
 
+		//		エラー有無
 		if (errList.size() == 0) {
 			Task t = new Task(id, userId, categoryId, task, taskDetail, deadline);
 			taskRepository.save(t);
@@ -195,8 +248,8 @@ public class TaskController {
 			result = "redirect:/taskList";
 
 		} else {
-			String sDeadline = deadline.getYear() + "/" + deadline.getMonthValue() + "/" + deadline.getDayOfMonth();
-			redirectAttributes.addFlashAttribute("deadlineFlash", sDeadline.replaceAll("/", "-"));
+			String sDeadline = deadline.getYear() + "-" + deadline.getMonthValue() + "-" + deadline.getDayOfMonth();
+			redirectAttributes.addFlashAttribute("deadlineFlash", sDeadline);
 			redirectAttributes.addFlashAttribute("taskDetail", taskDetail);
 			redirectAttributes.addFlashAttribute("categoryId", categoryId);
 			redirectAttributes.addFlashAttribute("currentTask", task);

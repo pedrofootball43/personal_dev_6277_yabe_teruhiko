@@ -18,15 +18,15 @@
 			<tr>
 				<th>カテゴリー名</th>
 				<th>
-					<th:block th:if ="${errKind == null}">
+					<th:block th:if = "${errKind == null}">
 						<input type = "text" name = "name" th:value = "${category.name}">
 					</th:block>
 					
-					<th:block th:if ="${errKind == 1}">
+					<th:block th:if = "${errKind == 1}">
 						<input type = "text" name = "name" th:value = "${name}">
 					</th:block>
 					
-					<th:block th:if ="${errKind == 2}">
+					<th:block th:if = "${errKind == 2}">
 						<input type = "text" name = "name" th:value = "${categoryName}">
 					</th:block>
 				</th>

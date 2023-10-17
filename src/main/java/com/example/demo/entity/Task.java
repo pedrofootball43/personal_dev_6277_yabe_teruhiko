@@ -36,7 +36,7 @@ public class Task {
 	private LocalDate deadline;
 
 	@Transient
-	private final static DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+	private final static DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	//	コンストラクタ
 	//	デフォルト
@@ -121,10 +121,6 @@ public class Task {
 
 	public String getDeadline() {
 
-		//		return deadline.getYear() + "/" +
-		//				deadline.getMonthValue() + "/" +
-		//				deadline.getDayOfMonth();
-
 		return deadline.format(FMT);
 
 	}
@@ -132,5 +128,9 @@ public class Task {
 	//	public void setDeadline(LocalDate deadline) {
 	//		this.deadline = deadline;
 	//	}
+
+	public static DateTimeFormatter getFmt() {
+		return FMT;
+	}
 
 }
