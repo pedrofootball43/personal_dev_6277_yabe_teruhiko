@@ -9,7 +9,12 @@
 	
 	<span th:replace = "greetingSpan"></span>
 	
-	<form action = "/category/add" method = "post">
+	<ul style="list-style: none; color: red;">
+		<li id = "err"></li>
+	</ul>
+	<p id = "err"></p>
+	
+	<form action = "/category/add" method = "post" name = "categoryForm">
 		<table border = "1">
 			<tr>
 				<th>
@@ -22,7 +27,8 @@
 			</tr>
 		</table>
 		
-		<button>この内容で登録</button>
+		<button onclick="return checkName()">この内容で登録</button>
+<!--		<input type = "submit" value = "登録" onclick="return checkName">-->
 		
 	</form>
 	
@@ -31,6 +37,14 @@
 	<br>
 	
 	<a href = "/taskList">ToDo一覧へ戻る</a>
+	
+	<script th:inline = "javascript">
+		function checkName(){
+			return false
+		}
+		
+	</script>
+		
 
 </body>
 </html>
