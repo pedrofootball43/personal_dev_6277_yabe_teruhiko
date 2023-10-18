@@ -3,11 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <title>カテゴリー編集</title>
+<link rel = "stylesheet" type = "text/css" href = "/css/style.css">
 </head>
 <body>
-	<h1>カテゴリー編集</h1>
 	
-	<span th:replace = "greetingSpan"></span>
+	<header th:replace = "header"></header>
+	
+	<hr>
+	
+	<nav>
+		<ul>
+			<li><a href = "/category">カテゴリー一覧へ戻る</a></li> 
+			<li><a href = "/taskList">タスクリスト一覧へ戻る</a></li>
+		</ul>
+	</nav>
+	
+	<h3>カテゴリー編集</h3>
 	
 	<ul style="list-style: none; color: red;">
 		<li th:each = "err : ${errs}" th:text = "${err}"></li>
@@ -37,11 +48,9 @@
 		
 	</form>
 	
-	<a href = "/category">カテゴリー一覧へ戻る</a> 
+	<hr>
 	
-	<br>
-	
-	<a href = "/taskList">ToDo一覧へ戻る</a>
+	<footer th:replace = "footer"></footer>
 
 </body>
 </html>

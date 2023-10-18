@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th = "http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>完了タスク詳細</title>
+<link rel = "stylesheet" type = "text/css" href = "/css/style.css">
+</head>
+<body>
+	
+	<header th:replace = "header"></header>
+	
+	<hr>
+	
+	<nav>
+		<ul>
+			<li><a href = "/taskList">タスクリスト一覧へ戻る</a></li>
+			<li><a href="/taskList/finish">完了タスクリスト一覧へ戻る</a></li>
+		</ul>
+	</nav>
+
+	<h3>完了タスク詳細</h3>
+
+	<table border = "1" class = "detail">
+		<tr>
+			<th>ToDo</th>
+			<td name = "task"  th:text = "${t.task}">
+<!--					<input type = "text" name = "task"  th:value = "${t.task}">-->
+			</td>
+		</tr>
+		
+		<tr>
+			<th>詳細</th>
+			<td name = "taskDetail" th:text = "${t.taskDetail}">
+<!--					<input type = "text" name = "taskDetail" th:value = "${t.taskDetail}">-->
+			</td>
+		</tr>
+		
+		<tr>
+			<th>カテゴリー</th>
+			<td name = "categoryId">
+				
+<!--				<select name = "categoryId">-->
+<!--						<option-->
+<!--							th:each = "category : ${categories}" -->
+<!--							th:text = "${category.name}" -->
+<!--							th:value = "${category.id}"-->
+<!--							th:selected = "${category.id == t.categoryId}">-->
+<!--						</option>-->
+<!--				</select>-->
+			</td>
+		</tr>
+		
+		<tr>
+			<th>期日</th>
+			<td name = "deadline" th:text = "${t.deadline}">
+					<!--初回-->
+<!--					<input type = "date" name = "deadline" th:value = "${t.deadline}">-->
+			</td>
+		</tr>
+		
+		<tr>
+			<th>残り日数</th>
+			<td th:text = "${dayNum}"></td>
+		</tr>
+		
+		<tr>
+			<th>状態</th>
+			<td th:text = "${t.situation}"></td>
+		</tr>
+	</table>
+			
+	<!--削除ボタン用-->
+	<form th:action = "'/taskList/' + ${t.id} + '/delete'" method = "post" id = "delete">
+		<button form = "delete">削除</button>
+	</form>
+		
+	<hr>
+	
+	<footer th:replace = "footer"></footer>
+
+</body>
+</html>
+
+
+

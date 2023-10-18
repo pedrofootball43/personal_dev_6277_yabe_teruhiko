@@ -1,0 +1,142 @@
+/*---全体---*/
+body {
+	background-color: #EFF0F7;
+	text-align: center;
+	min-width: 900px;
+	
+}
+
+/*---ヘッダー・ナビゲーション・フッター---*/
+header, footer{
+	background-color: #45496a;
+	color: #ffffff;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+nav{
+	background-color: #45496a;
+	color: #ffffff;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	
+}
+
+/*---ナビゲーション　リスト親要素---*/
+nav ul{
+/*	子要素を横並び*/
+	display: flex;
+	justify-content: center;
+/*	箇条書きの点　削除*/
+	list-style: none;
+	padding: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+/*---ナビゲーション　リスト子要素---*/
+nav li{
+	text-align: center;
+	border: solid 1px #ffffff;	
+	padding:10px 30px;
+}
+
+header a, nav, a{
+	color: #ffffff;
+}
+
+/*---仕切り線---*/
+hr{
+	border-top: 2px dashed rgb(0, 128, 255);
+}
+
+/*---見出し3　タスク一覧等---*/
+h3{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+/*---全テーブル---*/
+table{
+	margin: 3px auto;
+}
+
+
+
+/*---テーブル：タスク一覧---*/
+.task{
+	width: 850px;
+	min-width: 200px;
+}
+
+/*---テーブル：タスク一覧　リンク---*/
+.task a {
+	color: black;
+}
+
+/*---テーブル：タスク一覧・検索・カテゴリ一覧　全td---*/
+.task td, #order td, #category td{
+	background:#ffffff;
+}
+
+/*---テーブル：タスク一覧・カテゴリ　奇数列のtd---*/
+.task tr:nth-child(odd) td, #category tr:nth-child(odd) td {
+	background:rgb(223, 244, 255);
+}
+
+/*---テーブル：タスク一覧・検索　先頭行(th)---*/
+.task th, #order th, #category th{
+	background:rgb(17, 100, 140);
+	color: #ffffff;
+}
+
+/*---テーブル：タスク詳細---*/
+.detail{
+	width: 500px;
+	min-width: 200px;
+}
+
+/*---テーブル：タスク詳細　入力覧---*/
+.detail input{
+	width: 97%;
+	text-align: center;
+}
+
+.No{
+	width: 50px;
+}
+
+/*---完了・戻したいボタン---*/
+.btn-solid{
+	
+/*	border: 2px solid #000;*/
+/*	border-radius:0;*/
+/*	background:#ffffff;*/
+	color: #ffffff;
+	border-top: 4px solid #48ecc4;
+	border-right:4px solid #0a5f4a;
+	border-bottom:4px solid #0f745b;
+	border-left: 4px solid #8cf9de;
+	border-radius: 4px;
+	background: #11a37f;
+}
+
+.btn-solid:hover{
+/*	color:#ffff;*/
+/*	background:#000;*/
+	color:#ffffff;
+	border-top: 4px solid #0f745b;
+	border-right:4px solid #8cf9de;
+	border-bottom:4px solid #48ecc4;
+	border-left: 4px solid #0a5f4a;
+	
+}
+
+/*#order{*/
+/*	margin:3px auto 3px 180px;*/
+/*}*/
+
+
+
+
+

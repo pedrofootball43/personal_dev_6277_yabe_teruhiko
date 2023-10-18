@@ -2,58 +2,74 @@
 <html xmlns:th = "http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>ToDo一覧</title>
+<title>タスク一覧</title>
+<link rel = "stylesheet" type = "text/css" href = "/css/style.css">
 </head>
 <body>
-	<h1>ToDo一覧</h1>
+
+	<header th:replace = "header"></header>
 	
-	<span th:replace = "greetingSpan"></span>
+	<hr>
+	
+	<nav>
+		<ul>
+			<li><a href = "/category">カテゴリー管理</a></li>
+			<li><a href="/taskList/finish">完了タスクリスト一覧</a></li>
+		</ul>
+	</nav>
+	
+	
+	<h3>タスク一覧</h3>
+	
+	
+	<div class = "content">
+		<form action = "/taskList" method = "get">
+			<table border = "1"  id = "order">
+				<tr>
+					<th>検索</th>
+					<th>並び替え</th>
+					<th>実行</th>
+				</tr>
+				<tr>	
+						<td>
+							<select name = "categoryId">
+									<option value = "0">全表示</option>
+									<option  
+										th:each = "category : ${categories}" 
+										th:text = "${category.name}" 
+										th:value = "${category.id}">
+									</option>
+							</select>
+						</td>
+						
+						<td>
+							<input type = "checkbox" name = "sort" value = "deadline">期日
+							<input type = "checkbox" name = "sort" value = "categories"> カテゴリー
+						</td>
+						
+						<td>
+							<button>実行</button>
+						</td>
+				</tr>
+			</table>
+			
+		</form>
+	</div>
 	
 	<br>
 	
-	<form action = "/taskList" method = "get">
-		<table border = "1">
-			<tr>
-				<th>検索</th>
-				<th>並び替え</th>
-				<th></th>
-			</tr>
-			<tr>	
-					<td>
-						<select name = "categoryId">
-								<option value = "0">全表示</option>
-								<option  
-									th:each = "category : ${categories}" 
-									th:text = "${category.name}" 
-									th:value = "${category.id}">
-								</option>
-						</select>
-					</td>
-					
-					<td>
-						<input type = "checkbox" name = "sort" value = "deadline">期日
-						<input type = "checkbox" name = "sort" value = "categories"> カテゴリー
-					</td>
-					
-					<td>
-						<button>実行</button>
-					</td>
-			</tr>
-		</table>
-		
-	</form>
-
+	<div>
+<!--	<a href = "/category">カテゴリー管理</a>-->
 	
-	<a href = "/category">カテゴリー管理</a>
-	
-	<form action = "/taskList/add" method = "get">
-		<button>新規登録</button>
-	</form>
+<!--	<form action = "/taskList/add" method = "get">-->
+<!--		<button>新規登録</button>-->
+<!--	</form>-->
+	</div>
 
-	<table border = "1">
+	<table border = "1" class = "task">
 		<tr>
-			<th>No</th>
-			<th>ToDo一覧</th>
+			<th class = "No">No</th>
+			<th>ToDo</th>
 			<th>カテゴリー</th>
 			<th>期日</th>
 <!--			<th>更新</th>-->
@@ -78,16 +94,24 @@
 <!--			</td>-->
 			
 			<td>
-				<form th:action = "'/taskList/' + ${t.id} + '/delete'" method = "post">
-					<button>完了</button>
+				<form th:action = "'/taskList/' + ${t.id} + '/finish'" method = "post">
+					<button class = "btn btn-solid">完了</button>
 				</form>
 			</td>		
 		</tr>
 		
 	</table>
 	
+	<div>
+		<form action = "/taskList/add" method = "get">
+			<button>新規登録</button>
+		</form>
+	</div>
 	
-
+	<hr>
+	
+	<footer th:replace = "footer"></footer>
+	
 </body>
 </html>
 

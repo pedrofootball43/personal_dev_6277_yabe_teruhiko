@@ -2,17 +2,29 @@
 <html xmlns:th = "http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>カテゴリー登録</title>
+<title>新規カテゴリー登録</title>
+<link rel = "stylesheet" type = "text/css" href = "/css/style.css">
 </head>
 <body>
-	<h1>カテゴリー登録</h1>
 	
-	<span th:replace = "greetingSpan"></span>
+	<header th:replace = "header"></header>
+	
+	<hr>
+	
+	<nav>
+		<lu>
+			<li><a href = "/category">カテゴリー一覧へ戻る</a></li>
+			<li><a href = "/taskList">タスクリスト一覧へ戻る</a></li>
+		</lu>
+	</nav>
+	
+	<h3>新規カテゴリー登録</h3>
 	
 	<ul style="list-style: none; color: red;">
 		<li id = "err"></li>
+		<li th:each = "err : ${errs}" th:text = "${err}"></li>
 	</ul>
-	<p id = "err"></p>
+<!--	<p id = "err"></p>-->
 	
 	<form action = "/category/add" method = "post" name = "categoryForm">
 		<table border = "1">
@@ -22,7 +34,7 @@
 				</th>
 				
 				<td>
-					<input type = "text" name = "name">
+					<input type = "text" name = "name" th:value = "${name}">
 				</td>
 			</tr>
 		</table>
@@ -32,15 +44,22 @@
 		
 	</form>
 	
-	<a href = "/category">カテゴリー一覧へ戻る</a> 
+	<hr>
 	
-	<br>
-	
-	<a href = "/taskList">ToDo一覧へ戻る</a>
+	<footer th:replace = "footer"></footer>
 	
 	<script th:inline = "javascript">
 		function checkName(){
-			return false
+			if(categoryForm.name.value == ""){
+				let err = document.querySelector("#err");
+				err.innerHTML = "【カテゴリー名】　は入力必須です";
+				return false;
+				
+			}else{
+				return true;	
+			}
+			
+			
 		}
 		
 	</script>

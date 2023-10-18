@@ -26,7 +26,9 @@ CREATE TABLE tasks
     task TEXT,
     task_detail TEXT,
     /*deadline TEXT*/
-    deadline DATE
+    deadline DATE,
+    situation TEXT
+    
 );
 
 CREATE VIEW v_tasks AS 
@@ -38,7 +40,8 @@ CREATE VIEW v_tasks AS
 		c.name AS category_name,
 		t.task,
 		t.task_detail,
-		t.deadline
+		t.deadline,
+		t.situation
 	FROM tasks t
 	JOIN categories c
 	ON t.category_id = c.id

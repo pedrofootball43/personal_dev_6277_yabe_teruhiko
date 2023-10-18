@@ -2,15 +2,86 @@
 <html xmlns:th = "http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>ToDo完了</title>
+<title>完了タスク一覧</title>
+<link rel = "stylesheet" type = "text/css" href = "/css/style.css">
 </head>
 <body>
-	<h1>ToDo完了</h1>
 	
-	<span th:replace = "greetingSpan"></span>
+	<header th:replace = "header"></header>
 	
-	<br>
+	<hr>
+	<nav>
+		<ul>
+			<li><a href = "/taskList">タスクリスト一覧へ戻る</a></li>
+		</ul>
+	</nav>
 	
-	<a href = "/taskList">一覧へ戻る</a>
+	<h3>完了タスク一覧</h3>
+	
+<!--	<form action = "/taskList/finish" method = "get">-->
+<!--		<table border = "1">-->
+<!--			<tr>-->
+<!--				<th>検索</th>-->
+<!--				<th>並び替え</th>-->
+<!--				<th></th>-->
+<!--			</tr>-->
+<!--			<tr>	-->
+<!--					<td>-->
+<!--						<select name = "categoryId">-->
+<!--								<option value = "0">全表示</option>-->
+<!--								<option  -->
+<!--									th:each = "category : ${categories}" -->
+<!--									th:text = "${category.name}" -->
+<!--									th:value = "${category.id}">-->
+<!--								</option>-->
+<!--						</select>-->
+<!--					</td>-->
+					
+<!--					<td>-->
+<!--						<input type = "checkbox" name = "sort" value = "deadline">期日-->
+<!--						<input type = "checkbox" name = "sort" value = "categories"> カテゴリー-->
+<!--					</td>-->
+					
+<!--					<td>-->
+<!--						<button>実行</button>-->
+<!--					</td>-->
+<!--			</tr>-->
+<!--		</table>-->
+		
+<!--	</form>-->
+	
+	<table border = "1" class = "task">
+		<tr>
+			<th class = "No">No</th>
+			<th>ToDo</th>
+			<th>カテゴリー</th>
+			<th>期日</th>
+			<th>戻すやつ</th>
+		</tr>
+		
+		<tr th:each = "t, start : ${tasks}">
+			<td th:text = "${start.count}"></td>
+			
+			<td>
+				<a th:href = "'/taskList/' + ${t.id} + '/edit'" th:text = "${t.task}"></a>
+			</td>
+			
+			<td th:text = "${t.categoryName}"></td>
+		
+			<td th:text = "${t.deadline}"></td>
+
+			<td>
+				<form th:action = "'/taskList/' + ${t.id} + '/notFinish'" method = "post">
+					<button class = "btn btn-solid">戻したい</button>
+				</form>
+			</td>		
+		</tr>
+		
+	</table>
+	
+	<hr>
+	
+	<footer th:replace = "footer"></footer>
+	
 </body>
 </html>

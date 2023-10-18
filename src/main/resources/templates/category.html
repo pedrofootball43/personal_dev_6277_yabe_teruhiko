@@ -3,45 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <title>カテゴリー管理</title>
+<link rel = "stylesheet" type = "text/css" href = "/css/style.css">
 </head>
 <body>
-	<h1>カテゴリー管理</h1>
+	<header th:replace = "header"></header>
 	
-	<span th:replace = "greetingSpan"></span>
+	<hr>
+	
+	<nav>
+		<ul>
+			<li><a href = "/taskList">タスクリスト一覧へ戻る</a></li>
+		</ul>
+	</nav>
+
+	<h3>カテゴリー管理</h3>
 
 	<ul style="list-style: none; color: red;">
 		<li th:each = "err : ${errs}" th:text = "${err}"></li>
 	</ul>
 
-
-	<form action = "/category/add" method = "get">
-		<button>新規登録</button>
-	</form>
-
-	<table border = "1">
+	<table border = "1" id = "category">
 		<tr>
 			<th>カテゴリー名</th>
 			<th>更新</th>
 			<th>削除</th>
 		</tr>
 		<tr th:each = "category, start : ${categories}">
-			<th th:text = "${category.name}"></th>
-			<th>
+			<td th:text = "${category.name}"></td>
+			<td>
 				<form th:action = "'/category/' + ${category.id} + '/edit'" method = "get">
 					<button>更新</button>
 				</form>
-			</th>
-			<th>
+			</td>
+			<td>
 				<form th:action = "'/category/' + ${category.id} + '/delete'" method = "post">
 					<button>削除</button>
 				</form>
 			</th>
 		</tr>
 	</table>
-		
-	<a href = "/taskList">ToDo一覧へ戻る</a>
+	
+	<form action = "/category/add" method = "get">
+		<button>新規登録</button>
+	</form>
 
 
+	<hr>
+	
+	<footer th:replace = "footer"></footer>
+	
 </body>
 </html>
 

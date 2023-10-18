@@ -35,8 +35,13 @@ public class Task {
 	//	private String deadline;
 	private LocalDate deadline;
 
+	private String situation;
+
 	@Transient
 	private final static DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+	@Transient
+	private LocalDate finishDate;
 
 	//	コンストラクタ
 	//	デフォルト
@@ -47,7 +52,7 @@ public class Task {
 	//	追加
 	//	元データ
 	//	public Task(
-	//			Integer userId, Integer categoryId, String task, String taskDetail, String deadline) {
+	//			Integer userId, Integer categoryId, String task, String taskDetail, LocalDate deadline) {
 	//		this.userId = userId;
 	//		this.categoryId = categoryId;
 	//		this.task = task;
@@ -56,27 +61,30 @@ public class Task {
 	//	}
 
 	public Task(
-			Integer userId, Integer categoryId, String task, String taskDetail, LocalDate deadline) {
+			Integer userId, Integer categoryId, String task, String taskDetail, LocalDate deadline, String situation) {
 		this.userId = userId;
 		this.categoryId = categoryId;
 		this.task = task;
 		this.taskDetail = taskDetail;
 		this.deadline = deadline;
+		this.situation = situation;
 	}
 
 	//　更新
 	//	元データ
-	//	public Task(
-	//			Integer id, Integer userId, Integer categoryId, String task, String taskDetail, String deadline) {
-	//		this(userId, categoryId, task, taskDetail, deadline);
-	//		this.id = id;
-	//	}
-
 	public Task(
-			Integer id, Integer userId, Integer categoryId, String task, String taskDetail, LocalDate deadline) {
-		this(userId, categoryId, task, taskDetail, deadline);
+			Integer id, Integer userId, Integer categoryId, String task, String taskDetail, LocalDate deadline,
+			String situation) {
+		this(userId, categoryId, task, taskDetail, deadline, situation);
 		this.id = id;
 	}
+
+	////	完了
+	//	public Task(
+	//			Integer id, Integer userId, Integer categoryId, String task, String taskDetail, LocalDate deadline, String situation) {
+	//		
+	//		this.situation = "済";
+	//	}
 
 	//	ゲッター・セッター
 	public Integer getId() {
@@ -129,8 +137,27 @@ public class Task {
 	//		this.deadline = deadline;
 	//	}
 
+	public String getSituation() {
+		return situation;
+	}
+
+	//	public void setSituation(String situation) {
+	//		this.situation = situation;
+	//	}
+
 	public static DateTimeFormatter getFmt() {
 		return FMT;
 	}
 
+	public LocalDate getLDeadline() {
+		return deadline;
+	}
+
+	public String getFinishDate() {
+		return finishDate.format(FMT);
+	}
+
+	public void setFinishDate(LocalDate finishDate) {
+		this.finishDate = finishDate;
+	}
 }

@@ -79,12 +79,29 @@ public class CategoryController {
 	//	カテゴリー追加　実行
 	@PostMapping("/category/add")
 	public String add(
-			@RequestParam(name = "name", defaultValue = "") String name) {
+			@RequestParam(name = "name", defaultValue = "") String name,
+			Model model) {
 
-		Category category = new Category(name);
-		categoryRepository.save(category);
+		//		ページ遷移先の指定
+		String result = "redirect:/category";
 
-		return "redirect:/category";
+		//		エラーメッセージ表示用リスト
+		List<String> errList = new ArrayList<>();
+
+		//		-----カテゴリー名の重複チェック-----
+		List<Category> checkCategory = categoryRepository.findByName(name);
+
+		if (checkCategory.size() == 0) {
+			Category category = new Category(name);
+			categoryRepository.save(category);
+
+		} else {
+			errList.add("カテゴリー名：【" + name + "】　は既に使用されています");
+			model.addAttribute("errs", errList);
+			result = "categoryAdd";
+		}
+
+		return result;
 
 	}
 

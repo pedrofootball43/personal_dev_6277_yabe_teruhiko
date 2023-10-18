@@ -2,19 +2,29 @@
 <html xmlns:th = "http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>ToDo登録</title>
+<title>新規タスク登録</title>
+<link rel = "stylesheet" type = "text/css" href = "/css/style.css">
 </head>
 <body>
-	<h1>ToDo登録</h1>
 	
-	<span th:replace = "greetingSpan"></span>
+	<header th:replace = "header"></header>
+	
+	<hr>
+	
+	<nav>
+		<ul>
+			<li><a href = "/taskList">タスクリスト一覧へ戻る</a></li>
+		</ul>
+	</nav>
+	
+	<h3>新規タスク登録</h3>
 	
 	<ul style="list-style: none; color: red;">
 		<li th:each = "err : ${errs}" th:text = "${err}"></li>
 	</ul>
 
 	<form action = "/taskList/add" method = "post">
-		<table border  = "1">
+		<table border  = "1" class = "detail">
 			<tr>
 				<th>ToDo</th>
 				<td>
@@ -42,16 +52,20 @@
 			<tr>
 				<th>期日</th>
 				<td>
-					<input type = "date" name = "deadline">
+					<input type = "date" name = "deadline" style="text-align: center; width: 100px;">
 				</td>
 			</tr>
 		</table>
 		
-		<button>この内容で登録</button>
+		<button>登録</button>
 		
 	</form>
 
-	<a href = "/taskList">一覧へ戻る</a>
+	
+	
+	<hr>
+	
+	<footer th:replace = "footer"></footer>
 
 </body>
 </html>

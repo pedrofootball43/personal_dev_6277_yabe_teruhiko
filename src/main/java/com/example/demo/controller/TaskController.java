@@ -59,32 +59,34 @@ public class TaskController {
 		//		検索：有
 		if (categoryId != 0) {
 			if (sort.length == 0) {
-				vtaskList = vtaskRepository.findByCategoryIdAndUserIdOrderById(categoryId, userId);
+				vtaskList = vtaskRepository.findByCategoryIdAndUserIdAndSituationOrderById(categoryId, userId, "未");
 			} else {
 				if ("deadline".equals(sort[0])) {
 					//		並び替え：期日
-					vtaskList = vtaskRepository.findByCategoryIdAndUserIdOrderByDeadline(categoryId, userId);
+					vtaskList = vtaskRepository.findByCategoryIdAndUserIdAndSituationOrderByDeadline(categoryId, userId,
+							"未");
 				} else {
 					//		並び替え：無
-					vtaskList = vtaskRepository.findByCategoryIdAndUserIdOrderById(categoryId, userId);
+					vtaskList = vtaskRepository.findByCategoryIdAndUserIdAndSituationOrderById(categoryId, userId, "未");
 				}
 			}
 			//		検索：無
 		} else {
 			if (sort.length == 2) {
 				//		並び替え：期日・カテゴリ
-				vtaskList = vtaskRepository.findByUserIdOrderByCategoryIdAscDeadlineAsc(userId);
+				vtaskList = vtaskRepository.findByUserIdAndSituationOrderByCategoryIdAscDeadlineAsc(userId, "未");
 			} else if (sort.length == 1) {
 				if ("deadline".equals(sort[0])) {
 					//		並び替え：期日
-					vtaskList = vtaskRepository.findByUserIdOrderByDeadline(userId);
+					vtaskList = vtaskRepository.findByUserIdAndSituationOrderByDeadline(userId, "未");
 				} else {
 					//		並び替え：カテゴリ
-					vtaskList = vtaskRepository.findByUserIdOrderByCategoryId(userId);
+					vtaskList = vtaskRepository.findByUserIdAndSituationOrderByCategoryId(userId, "未");
 				}
 			} else {
 				//		指定なし
-				vtaskList = vtaskRepository.findByUserIdOrderById(userId);
+				//				vtaskList = vtaskRepository.findByUserIdOrderById(userId);
+				vtaskList = vtaskRepository.findByUserIdAndSituationOrderById(userId, "未");
 			}
 		}
 		//		タスクリスト　出力
@@ -128,7 +130,7 @@ public class TaskController {
 		LocalDate deadline = LocalDate.parse(t.getDeadline(), DateTimeFormatter.ofPattern(FORMAT));
 		long dayNum = ChronoUnit.DAYS.between(now, deadline);
 
-		if (dayNum < 0) {
+		if (dayNum < 0 || "済".equals(t.getSituation())) {
 			dayNum = 0;
 		}
 
@@ -155,8 +157,19 @@ public class TaskController {
 
 	}
 
-	////	完了リスト　表示
-	//	@GetMapping("/taskList/finish")
+	//	完了リスト　表示
+	@GetMapping("/taskList/finish")
+	public String showfinish(Model model) {
+
+		Integer userId = account.getUserId();
+
+		//		出力用タスクリスト(空)　作成
+		List<VTask> vtaskList = null;
+		vtaskList = vtaskRepository.findByUserIdAndSituationOrderByDeadline(userId, "済");
+		model.addAttribute("tasks", vtaskList);
+
+		return "taskListFinish";
+	}
 
 	//	リスト登録　実行
 	@PostMapping("/taskList/add")
@@ -165,9 +178,10 @@ public class TaskController {
 			@RequestParam(name = "detail", defaultValue = "") String detail,
 			@RequestParam(name = "categoryId", defaultValue = "") Integer categoryId,
 			//			@RequestParam(name = "deadline", defaultValue = "") String deadline
-			@RequestParam(name = "deadline", defaultValue = "") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate deadline,
+			@RequestParam(name = "deadline", defaultValue = "9999-12-31") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate deadline,
 			RedirectAttributes redirectAttributes) {
 
+		final String SITUATION = "未";
 		String result = "redirect:/taskList/add";
 		Integer userId = account.getUserId();
 
@@ -181,7 +195,11 @@ public class TaskController {
 		}
 
 		//		期日過去
-		if (deadline != null && deadline.isBefore(LocalDate.now())) {
+		LocalDate chechDate = LocalDate.of(9999, 12, 31);
+		if (deadline.isEqual(chechDate)) {
+			errList.add("【期日】　は入力必須です");
+			//			errKind += 2;
+		} else if (deadline != null && deadline.isBefore(LocalDate.now())) {
 			LocalDate lToday = LocalDate.now();
 			String sToday = lToday.getYear() + "/" + lToday.getMonthValue() + "/" + lToday.getDayOfMonth();
 			errList.add("【期日】　は本日（" + sToday + ")より後を選択してください");
@@ -190,7 +208,7 @@ public class TaskController {
 
 		//		エラー有無
 		if (errList.size() == 0) {
-			Task t = new Task(userId, categoryId, task, detail, deadline);
+			Task t = new Task(userId, categoryId, task, detail, deadline, SITUATION);
 			taskRepository.save(t);
 
 			result = "redirect:/taskList";
@@ -215,6 +233,7 @@ public class TaskController {
 			@RequestParam(name = "deadline", defaultValue = "9999-12-31") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate deadline,
 			RedirectAttributes redirectAttributes) {
 
+		final String SITUATION = "未";
 		String result = "redirect:/taskList/{id}/edit";
 		Integer errKind = 0;
 		Integer userId = account.getUserId();
@@ -242,7 +261,7 @@ public class TaskController {
 
 		//		エラー有無
 		if (errList.size() == 0) {
-			Task t = new Task(id, userId, categoryId, task, taskDetail, deadline);
+			Task t = new Task(id, userId, categoryId, task, taskDetail, deadline, SITUATION);
 			taskRepository.save(t);
 
 			result = "redirect:/taskList";
@@ -262,14 +281,59 @@ public class TaskController {
 
 	}
 
+	//	リスト未完了　→　完了　実行
+	@PostMapping("/taskList/{id}/finish")
+	public String finish(
+			@PathVariable("id") Integer id) {
+
+		final String SITUATION = "済";
+		Task t = taskRepository.findById(id).get();
+
+		Task newT = new Task(t.getId(), t.getUserId(), t.getCategoryId(), t.getTask(), t.getTaskDetail(),
+				t.getLDeadline(), SITUATION);
+
+		taskRepository.save(newT);
+
+		return "redirect:/taskList";
+
+	}
+
+	//	リスト完了　→　未完了　実行
+	@PostMapping("/taskList/{id}/notFinish")
+	public String notFinish(
+			@PathVariable("id") Integer id) {
+
+		final String SITUATION = "未";
+		Task t = taskRepository.findById(id).get();
+
+		Task newT = new Task(t.getId(), t.getUserId(), t.getCategoryId(), t.getTask(), t.getTaskDetail(),
+				t.getLDeadline(), SITUATION);
+
+		taskRepository.save(newT);
+
+		return "redirect:/taskList/finish";
+
+	}
+
 	//	リスト削除　実行
 	@PostMapping("/taskList/{id}/delete")
 	public String delete(
 			@PathVariable("id") Integer id) {
 
+		//		リダイレクト先　指定
+		String result = "redirect:/taskList";
+
+		//		対象タスク　取得
+		Task t = taskRepository.findById(id).get();
+
+		//		対象タスク　状況確認　→　リダイレクト先変更
+		if ("済".equals(t.getSituation())) {
+			result = "redirect:/taskList/finish";
+		}
+
 		taskRepository.deleteById(id);
 
-		return "redirect:/taskList";
+		return result;
 
 	}
 

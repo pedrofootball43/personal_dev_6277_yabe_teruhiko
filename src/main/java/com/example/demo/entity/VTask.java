@@ -32,6 +32,8 @@ public class VTask {
 
 	private LocalDate deadline;
 
+	private String situation;
+
 	//	ゲッター・セッター
 	public Integer getId() {
 		return id;
@@ -91,4 +93,11 @@ public class VTask {
 	//		this.deadline = deadline;
 	//	}
 
+	public String getSituation() {
+		return situation;
+	}
+
+	//	public void setSituation(String situation) {
+	//		this.situation = situation;
+	//	}
 }
