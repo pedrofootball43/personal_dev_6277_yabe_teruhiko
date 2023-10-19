@@ -13,20 +13,35 @@
 	
 	<nav>
 		<ul>
-			<li><a href = "/category">カテゴリー管理</a></li>
-			<li><a href="/taskList/finish">完了タスクリスト一覧</a></li>
+			<li><a href = "/category" class="link-category">カテゴリー管理</a></li>
+			<li><a href="/taskList/finish">完了タスク一覧</a></li>
 		</ul>
 	</nav>
 	
 	
-	<h3>タスク一覧</h3>
+<!--	<h3>タスク一覧</h3>-->
+	<h3>ホーム</h3>
 	
-	
+	<div class = "alert">
+		<p th:text = "${okMsg}"></p>
+		
+		<p th:text = "${outMsg}" style="color: red;"></p>
+		<ul style="color: red;">
+			<li th:each = "out : ${outs}" th:text = "${out}"></li>
+		</ul>
+		
+		<p th:text = "${alertMsg}" style="color: red;"></p>
+		<ul style="color: red;">
+			<li th:each = "alert : ${alerts}" th:text = "${alert}"></li>
+		</ul>
+	</div>
+
 	<div class = "content">
 		<form action = "/taskList" method = "get">
-			<table border = "1"  id = "order">
+			<table border = "1" id = "order">
 				<tr>
 					<th>検索</th>
+<!--					<th colspan="2">並び替え</th>-->
 					<th>並び替え</th>
 					<th>実行</th>
 				</tr>
@@ -44,11 +59,13 @@
 						
 						<td>
 							<input type = "checkbox" name = "sort" value = "deadline">期日
-							<input type = "checkbox" name = "sort" value = "categories"> カテゴリー
+<!--						</td>-->
+<!--						<td>-->
+								<input type = "checkbox" name = "sort" value = "categories"> カテゴリー
 						</td>
 						
 						<td>
-							<button>実行</button>
+							<button class = "btn btn-solid">実行</button>
 						</td>
 				</tr>
 			</table>
@@ -93,7 +110,7 @@
 <!--				</form>-->
 <!--			</td>-->
 			
-			<td>
+			<td class = "td-btn">
 				<form th:action = "'/taskList/' + ${t.id} + '/finish'" method = "post">
 					<button class = "btn btn-solid">完了</button>
 				</form>
@@ -104,7 +121,7 @@
 	
 	<div>
 		<form action = "/taskList/add" method = "get">
-			<button>新規登録</button>
+			<button class = "btn-ToDo btn-big">新規登録</button>
 		</form>
 	</div>
 	

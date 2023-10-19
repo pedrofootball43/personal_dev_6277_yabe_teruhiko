@@ -92,6 +92,43 @@ public class TaskController {
 		//		タスクリスト　出力
 		model.addAttribute("tasks", vtaskList);
 
+		List<String> alertList = new ArrayList<>();
+		List<String> outList = new ArrayList<>();
+		List<Task> taskList = taskRepository.findByUserIdAndSituation(userId, "未");
+		Integer alertNum = 0;
+		Integer outNum = 0;
+		final String FORMAT = "yyyy-MM-dd";
+		LocalDate now = LocalDate.now();
+
+		for (Task t : taskList) {
+			//			String tDeadline = t.getDeadline();
+			//			vtDeadline.replaceAll("/", "-");
+			LocalDate deadline = LocalDate.parse(t.getDeadline(), DateTimeFormatter.ofPattern(FORMAT));
+			long dayNum = ChronoUnit.DAYS.between(now, deadline);
+
+			if (dayNum < 0) {
+				outList.add(t.getTask());
+				outNum++;
+			} else if (dayNum < 8) {
+				alertList.add(t.getTask());
+				alertNum++;
+			}
+		}
+
+		if (outNum != 0) {
+			model.addAttribute("outMsg", "期日の過ぎているタスクが【" + outNum + "件】あります");
+			model.addAttribute("outs", outList);
+		}
+
+		if (alertNum != 0) {
+			model.addAttribute("alertMsg", "期日の近いタスクが【" + alertNum + "件】あります");
+			model.addAttribute("alerts", alertList);
+		}
+
+		if (outNum == 0 && alertNum == 0) {
+			model.addAttribute("okMsg", "期日を過ぎたタスク、期日の近いタスクはありません");
+		}
+
 		return "taskList";
 	}
 
@@ -129,11 +166,17 @@ public class TaskController {
 		LocalDate now = LocalDate.now();
 		LocalDate deadline = LocalDate.parse(t.getDeadline(), DateTimeFormatter.ofPattern(FORMAT));
 		long dayNum = ChronoUnit.DAYS.between(now, deadline);
+		String numColor = "black";
 
 		if (dayNum < 0 || "済".equals(t.getSituation())) {
 			dayNum = 0;
 		}
 
+		if (dayNum < 8 && "未".equals(t.getSituation())) {
+			numColor = "red";
+		}
+
+		model.addAttribute("numColor", numColor);
 		model.addAttribute("dayNum", dayNum);
 
 		//		-----エラー発生　情報取得・出力-----
@@ -169,6 +212,28 @@ public class TaskController {
 		model.addAttribute("tasks", vtaskList);
 
 		return "taskListFinish";
+	}
+
+	//	完了タスク詳細　表示
+	@GetMapping("taskList/{id}/finish")
+	public String finishDeatil(
+			@PathVariable("id") Integer id,
+			Model model) {
+
+		Task t = taskRepository.findById(id).get();
+		model.addAttribute("t", t);
+
+		VTask vt = vtaskRepository.findById(id).get();
+		String categoryName = vt.getCategoryName();
+		model.addAttribute("categoryName", categoryName);
+
+		//		String finishDate = t.getFinishDate();
+		//		model.addAttribute("finishDate", finishDate.replaceAll("-", "/"));
+
+		String deadline = t.getDeadline();
+		model.addAttribute("deadline", deadline.replaceAll("-", "/"));
+
+		return "taskFinishDetail";
 	}
 
 	//	リスト登録　実行
@@ -293,6 +358,8 @@ public class TaskController {
 				t.getLDeadline(), SITUATION);
 
 		taskRepository.save(newT);
+
+		t.setFinishDate(LocalDate.now());
 
 		return "redirect:/taskList";
 

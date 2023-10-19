@@ -15,13 +15,13 @@
 		<ul>
 			<!--未完了タスク一覧からのアクセス-->
 			<th:block th:if = "${t.situation.equals('未')}">
-				<li><a href = "/taskList">タスクリスト一覧へ戻る</a></li>
+				<li><a href = "/taskList">ホーム</a></li>
 			</th:block>
 			
 			<!--完了タスク一覧からのアクセス-->
 			<th:block th:if = "${t.situation.equals('済')}">
-				<li><a href = "/taskList">タスクリスト一覧へ戻る</a></li>
-				<li><a href="/taskList/finish">完了タスクリスト一覧へ戻る</a></li>
+				<li><a href = "/taskList">ホーム</a></li>
+				<li><a href="/taskList/finish">完了タスク一覧</a></li>
 			</th:block>
 		</ul>
 	</nav>
@@ -56,10 +56,12 @@
 				<th>詳細</th>
 				<td th:switch = "${errKind}">
 						<!--初回-->
-						<input type = "text" name = "taskDetail" th:case = "null" th:value = "${t.taskDetail}">
+<!--						<input type = "text" name = "taskDetail" th:case = "null" th:value = "${t.taskDetail}">-->
+						<textarea name = "taskDetail" th:case = "null" th:text = "${t.taskDetail}"></textarea>
 					
 						<!--ToDo無し,期日過去,ToDo無し・期日過去-->
-						<input type = "text" name = "taskDetail" th:case = "*" th:value = "${taskDetail}">
+<!--						<input type = "text" name = "taskDetail" th:case = "*" th:value = "${taskDetail}">-->
+						<textarea name = "taskDetail" th:case = "*" th:text = "${taskDetail}"></textarea>
 				</td>
 			</tr>
 			
@@ -106,23 +108,24 @@
 			
 			<tr>
 				<th>残り日数</th>
-				<td th:text = "${dayNum}"></td>
+				<td th:text = "${dayNum}" th:style="|color:${numColor}|"></td>
 			</tr>
 			
-			<tr>
-				<th>状態</th>
-				<td th:text = "${t.situation}"></td>
-			</tr>
+<!--			<tr>-->
+<!--				<th>状態</th>-->
+<!--				<td th:text = "${t.situation}"></td>-->
+<!--			</tr>-->
 		</table>
 			
 		
-		<button form = "edit">リセット</button>	
-		<button>更新</button>	
+		<button form = "edit" class = "btn-ToDo btn-big" id = "btn-reset">リセット</button>	
+		<button class = "btn-ToDo">更新</button>
+		<button form = "delete" class = "btn-ToDo btn-deleteTask">削除</button>
 	</form>
 	
 	<!--削除ボタン用-->
 	<form th:action = "'/taskList/' + ${t.id} + '/delete'" method = "post" id = "delete">
-		<button form = "delete">削除</button>
+		
 	</form>
 	
 	<!--リセットボタン用-->

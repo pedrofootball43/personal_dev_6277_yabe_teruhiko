@@ -13,8 +13,8 @@
 	
 	<nav>
 		<ul>
-			<li><a href = "/taskList">タスクリスト一覧へ戻る</a></li>
-			<li><a href="/taskList/finish">完了タスクリスト一覧へ戻る</a></li>
+			<li><a href = "/taskList">ホーム</a></li>
+			<li><a href="/taskList/finish">完了タスク一覧</a></li>
 		</ul>
 	</nav>
 
@@ -37,7 +37,7 @@
 		
 		<tr>
 			<th>カテゴリー</th>
-			<td name = "categoryId">
+			<td name = "categoryId" th:text = "${categoryName}">
 				
 <!--				<select name = "categoryId">-->
 <!--						<option-->
@@ -52,26 +52,27 @@
 		
 		<tr>
 			<th>期日</th>
-			<td name = "deadline" th:text = "${t.deadline}">
-					<!--初回-->
-<!--					<input type = "date" name = "deadline" th:value = "${t.deadline}">-->
+			<td name = "deadline" th:text = "${deadline}">
+
+<!--			<th>完了日</th>-->
+<!--			<td name = "finishDate" th:text = "${finishDate}">-->
 			</td>
 		</tr>
 		
-		<tr>
-			<th>残り日数</th>
-			<td th:text = "${dayNum}"></td>
-		</tr>
+<!--		<tr>-->
+<!--			<th>残り日数</th>-->
+<!--			<td>0</td>-->
+<!--		</tr>-->
 		
-		<tr>
-			<th>状態</th>
-			<td th:text = "${t.situation}"></td>
-		</tr>
+<!--		<tr>-->
+<!--			<th>状態</th>-->
+<!--			<td th:text = "${t.situation}"></td>-->
+<!--		</tr>-->
 	</table>
 			
 	<!--削除ボタン用-->
 	<form th:action = "'/taskList/' + ${t.id} + '/delete'" method = "post" id = "delete">
-		<button form = "delete">削除</button>
+		<button form = "delete" class = "btn-ToDo btn-delete">削除</button>
 	</form>
 		
 	<hr>

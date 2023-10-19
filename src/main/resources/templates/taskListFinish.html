@@ -12,7 +12,7 @@
 	<hr>
 	<nav>
 		<ul>
-			<li><a href = "/taskList">タスクリスト一覧へ戻る</a></li>
+			<li><a href = "/taskList">ホーム</a></li>
 		</ul>
 	</nav>
 	
@@ -63,14 +63,14 @@
 			<td th:text = "${start.count}"></td>
 			
 			<td>
-				<a th:href = "'/taskList/' + ${t.id} + '/edit'" th:text = "${t.task}"></a>
+				<a th:href = "'/taskList/' + ${t.id} + '/finish'" th:text = "${t.task}"></a>
 			</td>
 			
 			<td th:text = "${t.categoryName}"></td>
 		
 			<td th:text = "${t.deadline}"></td>
 
-			<td>
+			<td class = "td-btn">
 				<form th:action = "'/taskList/' + ${t.id} + '/notFinish'" method = "post">
 					<button class = "btn btn-solid">戻したい</button>
 				</form>

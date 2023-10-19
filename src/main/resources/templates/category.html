@@ -12,7 +12,7 @@
 	
 	<nav>
 		<ul>
-			<li><a href = "/taskList">タスクリスト一覧へ戻る</a></li>
+			<li><a href = "/taskList">ホーム</a></li>
 		</ul>
 	</nav>
 
@@ -22,7 +22,7 @@
 		<li th:each = "err : ${errs}" th:text = "${err}"></li>
 	</ul>
 
-	<table border = "1" id = "category">
+	<table border = "1" class = "category">
 		<tr>
 			<th>カテゴリー名</th>
 			<th>更新</th>
@@ -30,21 +30,21 @@
 		</tr>
 		<tr th:each = "category, start : ${categories}">
 			<td th:text = "${category.name}"></td>
-			<td>
+			<td class = "td-btn">
 				<form th:action = "'/category/' + ${category.id} + '/edit'" method = "get">
-					<button>更新</button>
+					<button class = "btn-solid">更新</button>
 				</form>
 			</td>
-			<td>
+			<td class = "td-btn">
 				<form th:action = "'/category/' + ${category.id} + '/delete'" method = "post">
-					<button>削除</button>
+					<button class = "btn-solid btn-delete">削除</button>
 				</form>
 			</th>
 		</tr>
 	</table>
 	
 	<form action = "/category/add" method = "get">
-		<button>新規登録</button>
+		<button class = "btn-ToDo btn-big">新規登録</button>
 	</form>
 
 
