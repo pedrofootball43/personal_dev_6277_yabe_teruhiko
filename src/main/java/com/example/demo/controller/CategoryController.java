@@ -158,7 +158,7 @@ public class CategoryController {
 		List<Task> taskList = taskRepository.findByCategoryIdAndUserId(id, userId);
 
 		if (taskList.size() != 0) {
-			errList.add("カテゴリ　：" + category.getName() + "　に属したToDoがあるため削除できません");
+			errList.add("カテゴリ　：【" + category.getName() + "】　に属したToDoがあるため削除できません");
 			errList.add("対象ToDo：" + (int) taskList.size() + "コ");
 			redirectAttributes.addFlashAttribute("errList", errList);
 

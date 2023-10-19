@@ -181,14 +181,14 @@ table th{
 }
 
 /*---テーブル：タスク詳細　入力覧---*/
-.detail input{
+.detail input, .category input{
 	width: 97%;
 	border-radius: 3px; /*ボックス角の丸み*/
 	text-align: center;
 	border: 2px solid rgb(0, 0, 0); /*枠線*/
 }
 
-.detail input:hover{
+.detail input:hover, .category input:hover{
     width: 97%;
     border-radius: 3px; /*ボックス角の丸み*/
     border: 2px solid rgb(136, 111, 255); /*枠線*/
