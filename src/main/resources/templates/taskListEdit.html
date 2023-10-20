@@ -13,16 +13,9 @@
 	
 	<nav>
 		<ul>
-			<!--未完了タスク一覧からのアクセス-->
-			<th:block th:if = "${t.situation.equals('未')}">
 				<li><a href = "/taskList">ホーム</a></li>
-			</th:block>
-			
-			<!--完了タスク一覧からのアクセス-->
-			<th:block th:if = "${t.situation.equals('済')}">
-				<li><a href = "/taskList">ホーム</a></li>
-				<li><a href="/taskList/finish">完了タスク一覧</a></li>
-			</th:block>
+				<li><a href = "/category" class="link-category">カテゴリー管理</a></li>
+				<li><a href="/taskList/finish">完了ToDo一覧</a></li>
 		</ul>
 	</nav>
 	
@@ -46,6 +39,12 @@
 
 						<!--ToDo無し・期日過去-->
 						<input type = "text" name = "task" th:case = "3" th:value = "${task}">
+						
+						<!--期日無し-->
+						<input type = "text" name = "task" th:case = "4" th:value = "${currentTask}">
+						
+						<!--ToDo無し・期日無し-->
+						<input type = "text" name = "task" th:case = "5" th:value = "${task}">
 						
 						<!--初回-->
 						<input type = "text" name = "task" th:case = "*" th:value = "${t.task}">

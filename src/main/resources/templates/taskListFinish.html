@@ -13,6 +13,8 @@
 	<nav>
 		<ul>
 			<li><a href = "/taskList">ホーム</a></li>
+			<li><a href = "/category" class="link-category">カテゴリー管理</a></li>
+			<li><a href="/taskList/finish">完了ToDo一覧</a></li>
 		</ul>
 	</nav>
 	
@@ -53,10 +55,10 @@
 	<table border = "1" class = "task">
 		<tr>
 			<th class = "No">No</th>
-			<th>ToDo</th>
+			<th class = "todo">ToDo</th>
 			<th>カテゴリー</th>
 			<th>期日</th>
-			<th>戻すやつ</th>
+			<th>未完了に戻す</th>
 		</tr>
 		
 		<tr th:each = "t, start : ${tasks}">
@@ -72,7 +74,7 @@
 
 			<td class = "td-btn">
 				<form th:action = "'/taskList/' + ${t.id} + '/notFinish'" method = "post">
-					<button class = "btn btn-solid">戻したい</button>
+					<button class = "btn btn-solid">未完了に戻す</button>
 				</form>
 			</td>		
 		</tr>

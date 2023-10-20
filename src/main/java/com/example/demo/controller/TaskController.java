@@ -49,7 +49,7 @@ public class TaskController {
 		Integer userId = account.getUserId();
 
 		//		-----カテゴリプルダウン　情報取得・出力-----
-		List<Category> categoryList = categoryRepository.findAll();
+		List<Category> categoryList = categoryRepository.findByUserIdOrderByIdAsc(userId);
 		model.addAttribute("categories", categoryList);
 
 		//		-----検索・並び替え-----
@@ -101,16 +101,16 @@ public class TaskController {
 		LocalDate now = LocalDate.now();
 
 		for (Task t : taskList) {
-			//			String tDeadline = t.getDeadline();
-			//			vtDeadline.replaceAll("/", "-");
 			LocalDate deadline = LocalDate.parse(t.getDeadline(), DateTimeFormatter.ofPattern(FORMAT));
 			long dayNum = ChronoUnit.DAYS.between(now, deadline);
 
 			if (dayNum < 0) {
-				outList.add(t.getTask());
+				String outDate = t.getDeadline().replace("-", "/");
+				outList.add(t.getTask() + "(" + outDate + ")");
 				outNum++;
 			} else if (dayNum < 8) {
-				alertList.add(t.getTask());
+				String alertDate = t.getDeadline().replace("-", "/");
+				alertList.add(t.getTask() + "(" + alertDate + ")");
 				alertNum++;
 			}
 		}
@@ -118,11 +118,13 @@ public class TaskController {
 		if (outNum != 0) {
 			model.addAttribute("outMsg", "期日の過ぎているタスクが【" + outNum + "件】あります");
 			model.addAttribute("outs", outList);
+			//			model.addAttribute("outDate", outDate);
 		}
 
 		if (alertNum != 0) {
 			model.addAttribute("alertMsg", "期日の近いタスクが【" + alertNum + "件】あります");
 			model.addAttribute("alerts", alertList);
+			//			model.addAttribute("alertDate", alertDate);
 		}
 
 		if (outNum == 0 && alertNum == 0) {
@@ -137,7 +139,7 @@ public class TaskController {
 	public String create(Model model) {
 
 		//		-----カテゴリプルダウン　情報取得・出力-----
-		List<Category> categoryList = categoryRepository.findAll();
+		List<Category> categoryList = categoryRepository.findByUserIdOrderByIdAsc(account.getUserId());
 		model.addAttribute("categories", categoryList);
 
 		//		-----エラー発生　情報取得・出力-----
@@ -155,7 +157,7 @@ public class TaskController {
 			Model model) {
 
 		//		-----カテゴリプルダウン　情報取得・出力-----
-		List<Category> categoryList = categoryRepository.findAll();
+		List<Category> categoryList = categoryRepository.findByUserIdOrderByIdAsc(account.getUserId());
 		model.addAttribute("categories", categoryList);
 
 		Task t = taskRepository.findById(id).get();
@@ -220,15 +222,15 @@ public class TaskController {
 			@PathVariable("id") Integer id,
 			Model model) {
 
-		Task t = taskRepository.findById(id).get();
-		model.addAttribute("t", t);
-
 		VTask vt = vtaskRepository.findById(id).get();
 		String categoryName = vt.getCategoryName();
 		model.addAttribute("categoryName", categoryName);
 
-		//		String finishDate = t.getFinishDate();
-		//		model.addAttribute("finishDate", finishDate.replaceAll("-", "/"));
+		Task t = taskRepository.findById(id).get();
+		model.addAttribute("t", t);
+
+		String finishDate = t.getFinishDate();
+		model.addAttribute("finishDate", finishDate.replaceAll("-", "/"));
 
 		String deadline = t.getDeadline();
 		model.addAttribute("deadline", deadline.replaceAll("-", "/"));
@@ -267,7 +269,7 @@ public class TaskController {
 		} else if (deadline != null && deadline.isBefore(LocalDate.now())) {
 			LocalDate lToday = LocalDate.now();
 			String sToday = lToday.getYear() + "/" + lToday.getMonthValue() + "/" + lToday.getDayOfMonth();
-			errList.add("【期日】　は本日（" + sToday + ")より後を選択してください");
+			errList.add("【期日】　は本日（" + sToday + ")以降を選択してください");
 
 		}
 
@@ -316,11 +318,11 @@ public class TaskController {
 		LocalDate chechDate = LocalDate.of(9999, 12, 31);
 		if (deadline.isEqual(chechDate)) {
 			errList.add("【期日】　は入力必須です");
-			//			errKind += 2;
+			errKind += 4;
 		} else if (deadline.isBefore(LocalDate.now())) {
 			LocalDate lToday = LocalDate.now();
 			String sToday = lToday.getYear() + "/" + lToday.getMonthValue() + "/" + lToday.getDayOfMonth();
-			errList.add("【期日】　は本日（" + sToday + ")より後を選択してください");
+			errList.add("【期日】　は本日（" + sToday + ")以降を選択してください");
 			errKind += 2;
 		}
 
@@ -355,11 +357,9 @@ public class TaskController {
 		Task t = taskRepository.findById(id).get();
 
 		Task newT = new Task(t.getId(), t.getUserId(), t.getCategoryId(), t.getTask(), t.getTaskDetail(),
-				t.getLDeadline(), SITUATION);
+				t.getLDeadline(), SITUATION, LocalDate.now());
 
 		taskRepository.save(newT);
-
-		t.setFinishDate(LocalDate.now());
 
 		return "redirect:/taskList";
 

@@ -14,60 +14,39 @@
 	<nav>
 		<ul>
 			<li><a href = "/taskList">ホーム</a></li>
+			<li><a href = "/category" class="link-category">カテゴリー管理</a></li>
 			<li><a href="/taskList/finish">完了ToDo一覧</a></li>
 		</ul>
 	</nav>
 
-	<h3>完了タスク詳細</h3>
+	<h3>完了ToDo詳細</h3>
 
 	<table border = "1" class = "detail">
 		<tr>
 			<th>ToDo</th>
-			<td name = "task"  th:text = "${t.task}">
-<!--					<input type = "text" name = "task"  th:value = "${t.task}">-->
-			</td>
+			<td name = "task"  th:text = "${t.task}"></td>
 		</tr>
 		
 		<tr>
 			<th>詳細</th>
-			<td name = "taskDetail" th:text = "${t.taskDetail}">
-<!--					<input type = "text" name = "taskDetail" th:value = "${t.taskDetail}">-->
-			</td>
+			<td name = "taskDetail" th:text = "${t.taskDetail}"></td>
 		</tr>
 		
 		<tr>
 			<th>カテゴリー</th>
-			<td name = "categoryId" th:text = "${categoryName}">
-				
-<!--				<select name = "categoryId">-->
-<!--						<option-->
-<!--							th:each = "category : ${categories}" -->
-<!--							th:text = "${category.name}" -->
-<!--							th:value = "${category.id}"-->
-<!--							th:selected = "${category.id == t.categoryId}">-->
-<!--						</option>-->
-<!--				</select>-->
-			</td>
+			<td name = "categoryId" th:text = "${categoryName}"></td>
 		</tr>
 		
 		<tr>
 			<th>期日</th>
-			<td name = "deadline" th:text = "${deadline}">
-
-<!--			<th>完了日</th>-->
-<!--			<td name = "finishDate" th:text = "${finishDate}">-->
-			</td>
+			<td name = "deadline" th:text = "${deadline}"></td>
 		</tr>
 		
-<!--		<tr>-->
-<!--			<th>残り日数</th>-->
-<!--			<td>0</td>-->
-<!--		</tr>-->
-		
-<!--		<tr>-->
-<!--			<th>状態</th>-->
-<!--			<td th:text = "${t.situation}"></td>-->
-<!--		</tr>-->
+		<tr>
+			<th>完了日</th>
+			<td name = "finishDate" th:text = "${finishDate}"></td>
+		</tr>
+
 	</table>
 			
 	<!--削除ボタン用-->
