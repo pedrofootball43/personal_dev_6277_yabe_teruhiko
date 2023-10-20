@@ -37,10 +37,10 @@
 			<td name = "categoryId" th:text = "${categoryName}"></td>
 		</tr>
 		
-		<tr>
-			<th>期日</th>
-			<td name = "deadline" th:text = "${deadline}"></td>
-		</tr>
+<!--		<tr>-->
+<!--			<th>期日</th>-->
+<!--			<td name = "deadline" th:text = "${deadline}"></td>-->
+<!--		</tr>-->
 		
 		<tr>
 			<th>完了日</th>
@@ -51,7 +51,7 @@
 			
 	<!--削除ボタン用-->
 	<form th:action = "'/taskList/' + ${t.id} + '/delete'" method = "post" id = "delete">
-		<button form = "delete" class = "btn-ToDo btn-delete">削除</button>
+		<button form = "delete" class = "btn-ToDo btn-deleteTask">削除</button>
 	</form>
 		
 	<hr>

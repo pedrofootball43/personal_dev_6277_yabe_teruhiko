@@ -22,7 +22,7 @@ INSERT INTO tasks(user_id, category_id, task, task_detail, deadline, situation) 
 INSERT INTO tasks(user_id, category_id, task, task_detail, deadline, situation) VALUES(1, 1, '英単語', '目標5分以上', '2023/10/28','未'); 
 INSERT INTO tasks(user_id, category_id, task, task_detail, deadline, situation) VALUES(1, 3, '引っ越し準備', '計画的に', '2023/10/15', '未');
 
-INSERT INTO tasks(user_id, category_id, task, task_detail, deadline, situation, finish_date) VALUES(1, 1, 'サッカー試合観戦', 'FM', '2023/09/21', '済', '2023/09/21');
+INSERT INTO tasks(user_id, category_id, task, task_detail, deadline, situation, finish_date) VALUES(1, 1, 'サッカー試合観戦', 'ユニフォーム必須', '2023/09/21', '済', '2023/09/21');
 INSERT INTO tasks(user_id, category_id, task, task_detail, deadline, situation, finish_date) VALUES(1, 1, 'ラーメン食べに行く', '必須', '2023/10/23', '済', '2023/10/20');
 INSERT INTO tasks(user_id, category_id, task, task_detail, deadline, situation, finish_date) VALUES(1, 1, '勉強', '頑張る', '2023/10/24', '済', '2023/10/23');
 
