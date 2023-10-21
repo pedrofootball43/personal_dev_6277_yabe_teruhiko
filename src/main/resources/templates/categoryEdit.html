@@ -13,8 +13,9 @@
 	
 	<nav>
 		<ul>
-			<li><a href = "/category">カテゴリー一覧へ戻る</a></li> 
-			<li><a href = "/taskList">タスクリスト一覧へ戻る</a></li>
+				<li><a href = "/taskList">ホーム</a></li>
+				<li><a href = "/category" class="link-category">カテゴリー管理</a></li>
+				<li><a href="/taskList/finish">完了ToDo一覧</a></li> 
 		</ul>
 	</nav>
 	
@@ -25,10 +26,10 @@
 	</ul>
 	
 	<form th:action = "'/category/' + ${category.id} + '/edit'" method = "post">
-		<table border = "1">
+		<table border = "1" class = "category">
 			<tr>
 				<th>カテゴリー名</th>
-				<th>
+				<td>
 					<th:block th:if = "${errKind == null}">
 						<input type = "text" name = "name" th:value = "${category.name}">
 					</th:block>
@@ -40,11 +41,11 @@
 					<th:block th:if = "${errKind == 2}">
 						<input type = "text" name = "name" th:value = "${categoryName}">
 					</th:block>
-				</th>
+				</td>
 			</tr>
 		</table>
 		
-		<button>更新</button>
+		<button class = "btn-ToDo">更新</button>
 		
 	</form>
 	

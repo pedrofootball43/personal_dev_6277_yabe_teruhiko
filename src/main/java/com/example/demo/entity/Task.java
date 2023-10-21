@@ -37,11 +37,11 @@ public class Task {
 
 	private String situation;
 
-	@Transient
-	private final static DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	@Column(name = "finish_date")
+	private LocalDate finishDate;
 
 	@Transient
-	private LocalDate finishDate;
+	private final static DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	//	コンストラクタ
 	//	デフォルト
@@ -50,16 +50,6 @@ public class Task {
 	}
 
 	//	追加
-	//	元データ
-	//	public Task(
-	//			Integer userId, Integer categoryId, String task, String taskDetail, LocalDate deadline) {
-	//		this.userId = userId;
-	//		this.categoryId = categoryId;
-	//		this.task = task;
-	//		this.taskDetail = taskDetail;
-	//		this.deadline = deadline;
-	//	}
-
 	public Task(
 			Integer userId, Integer categoryId, String task, String taskDetail, LocalDate deadline, String situation) {
 		this.userId = userId;
@@ -71,7 +61,6 @@ public class Task {
 	}
 
 	//　更新
-	//	元データ
 	public Task(
 			Integer id, Integer userId, Integer categoryId, String task, String taskDetail, LocalDate deadline,
 			String situation) {
@@ -79,12 +68,14 @@ public class Task {
 		this.id = id;
 	}
 
-	////	完了
-	//	public Task(
-	//			Integer id, Integer userId, Integer categoryId, String task, String taskDetail, LocalDate deadline, String situation) {
-	//		
-	//		this.situation = "済";
-	//	}
+	//	完了
+	public Task(
+			Integer id, Integer userId, Integer categoryId, String task, String taskDetail, LocalDate deadline,
+			String situation, LocalDate finishDate) {
+		this(id, userId, categoryId, task, taskDetail, deadline, situation);
+		this.situation = "済";
+		this.finishDate = finishDate;
+	}
 
 	//	ゲッター・セッター
 	public Integer getId() {
@@ -157,7 +148,7 @@ public class Task {
 		return finishDate.format(FMT);
 	}
 
-	public void setFinishDate(LocalDate finishDate) {
-		this.finishDate = finishDate;
-	}
+	//	public void setFinishDate(LocalDate finishDate) {
+	//		this.finishDate = finishDate;
+	//	}
 }

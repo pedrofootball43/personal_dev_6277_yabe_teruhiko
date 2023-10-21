@@ -15,6 +15,7 @@ CREATE TABLE users
 CREATE TABLE categories
 (
     id SERIAL PRIMARY KEY,
+    user_id INTEGER,
     name TEXT
 );
 
@@ -27,7 +28,8 @@ CREATE TABLE tasks
     task_detail TEXT,
     /*deadline TEXT*/
     deadline DATE,
-    situation TEXT
+    situation TEXT,
+    finish_date DATE
     
 );
 
@@ -41,7 +43,8 @@ CREATE VIEW v_tasks AS
 		t.task,
 		t.task_detail,
 		t.deadline,
-		t.situation
+		t.situation,
+		t.finish_date
 	FROM tasks t
 	JOIN categories c
 	ON t.category_id = c.id

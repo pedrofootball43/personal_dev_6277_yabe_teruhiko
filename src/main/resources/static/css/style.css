@@ -1,25 +1,86 @@
+/*---クラス内容---*/
+/*.task：タスク一覧・完了タスク一覧ページ*/
+/*.detail：タスク詳細・タスク追加ページ*/
+/*.category：カテゴリー一覧・カテゴリー追加ページ*/
+
+html{
+	box-sizing: border-box;
+	font-size: 16px;
+}
+
+
 /*---全体---*/
 body {
-	background-color: #EFF0F7;
+/*	background-color: #EFF0F7;*/
+	background-color: rgb(226, 254, 230);
 	text-align: center;
 	min-width: 900px;
+	width:100%;
+	font-family: Arial, Helvetica, sans-serif;
+	margin:0;
 	
 }
 
-/*---ヘッダー・ナビゲーション・フッター---*/
+p{
+	margin-top: 5px;
+	margin-bottom:0px;
+}
+
+
+
+.alert ul{
+	display: inline-block;
+	margin:0px;
+}
+
+.alert li{
+	text-align: left;
+}
+
+
+
+/*---ヘッダー・フッター---*/
 header, footer{
-	background-color: #45496a;
+/*	background-color: #45496a;*/
+	background-color: rgb(34, 168, 48);
 	color: #ffffff;
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
 
+/*---ナビゲーション---*/
 nav{
-	background-color: #45496a;
+/*	background-color: #45496a;*/
+	background-color: rgb(34, 168, 48);
 	color: #ffffff;
 	padding-top: 0px;
 	padding-bottom: 0px;
 	
+}
+
+/*ヘッダー　リスト親要素---*/
+header ul{
+	/*	子要素を横並び*/
+	display: flex;
+	justify-content: center;
+	/*箇条書きの点　削除*/
+	list-style: none;
+	padding: 0px;
+	margin-top:5px;
+	margin-bottom: 0px;
+}
+
+
+/*ヘッダー　リスト子要素---*/
+header li{
+	width: 17%;
+	min-width: 144px;
+	text-align: center;
+}
+
+header a:hover{
+/*	color: rgb(196, 174, 240);*/
+	color:  rgb(103, 224, 115);
 }
 
 /*---ナビゲーション　リスト親要素---*/
@@ -36,12 +97,34 @@ nav ul{
 
 /*---ナビゲーション　リスト子要素---*/
 nav li{
+	width: 25%;
+	max-width: 257px;
+	min-width: 217px;
 	text-align: center;
-	border: solid 1px #ffffff;	
-	padding:10px 30px;
+	border-right: solid 1px #ffffff;
+	border-left: solid 1px #ffffff;
+		
+/*	padding:10px 30px;*/
 }
 
-header a, nav, a{
+/*---ナビゲーション　リスト子要素　カーソル乗った時---*/
+nav li:hover{
+/*	background-color: rgb(100, 105, 153);*/
+	background-color: rgb(95, 222, 107);
+}
+
+/*---ナビゲーション　リンク---*/
+nav a{
+	display: block;
+	padding-top:10px ;
+	padding-bottom:10px ;
+}
+
+
+
+/*---リンク・全リンク（テーブル内除く）---*/
+a{
+	/*文字：白*/
 	color: #ffffff;
 }
 
@@ -56,6 +139,8 @@ h3{
 	margin-bottom: 10px;
 }
 
+
+
 /*---全テーブル---*/
 table{
 	margin: 3px auto;
@@ -65,29 +150,42 @@ table{
 
 /*---テーブル：タスク一覧---*/
 .task{
-	width: 850px;
-	min-width: 200px;
+	width: 800px;
 }
 
 /*---テーブル：タスク一覧　リンク---*/
-.task a {
+.task a{
+	display: block;
+	width: 100%;
 	color: black;
 }
 
+.task a:hover{
+	display: block;
+	width: 100%;
+	color: rgb(223, 0, 0);
+}
+
 /*---テーブル：タスク一覧・検索・カテゴリ一覧　全td---*/
-.task td, #order td, #category td{
+/*.task td, #order td, .category td{*/
+table td{
 	background:#ffffff;
 }
 
-/*---テーブル：タスク一覧・カテゴリ　奇数列のtd---*/
-.task tr:nth-child(odd) td, #category tr:nth-child(odd) td {
+/*---テーブル：タスク一覧・カテゴリ・タスク詳細　奇数列のt（タスク詳細のみ全td）d---*/
+.task tr:nth-child(odd) td, .detail td {
 	background:rgb(223, 244, 255);
 }
 
-/*---テーブル：タスク一覧・検索　先頭行(th)---*/
-.task th, #order th, #category th{
+/*---テーブル：タスク一覧・検索・タスク詳細　先頭行(th)（タスク詳細のみ先頭列）---*/
+/*.task th, #order th, .category th, .detail th{*/
+table th{
 	background:rgb(17, 100, 140);
 	color: #ffffff;
+}
+
+.todo {
+	width: 298px;
 }
 
 /*---テーブル：タスク詳細---*/
@@ -97,21 +195,58 @@ table{
 }
 
 /*---テーブル：タスク詳細　入力覧---*/
-.detail input{
+.detail input, .category input{
 	width: 97%;
+	border-radius: 3px; /*ボックス角の丸み*/
 	text-align: center;
+	border: 2px solid rgb(0, 0, 0); /*枠線*/
 }
 
+.detail input:hover, .category input:hover{
+    width: 97%;
+    border-radius: 3px; /*ボックス角の丸み*/
+    border: 2px solid rgb(136, 111, 255); /*枠線*/
+}
+
+.detail td{
+	width: 330px;
+	max-width: 330px;
+}
+
+select{
+	border-radius: 3px; /*ボックス角の丸み*/
+	border: 2px solid rgb(182, 182, 182); /*枠線*/
+}
+
+select:hover, #order input:hover{
+	border-radius: 3px; /*ボックス角の丸み*/
+	border: 2px solid rgb(136, 111, 255); /*枠線*/
+}
+
+
+/*---テーブル：タスク詳細　入力覧---*/
+textarea{
+	resize: vertical;
+    max-height: 500px;
+    min-height: 100px;
+	width: 97%;
+	border-radius: 3px; /*ボックス角の丸み*/
+	border: 2px solid rgb(0, 0, 0); /*枠線*/
+}
+
+textarea:hover{
+    width: 97%;
+    border-radius: 3px; /*ボックス角の丸み*/
+    border: 2px solid rgb(136, 111, 255); /*枠線*/
+}
+
+/*---テーブル　td：No---*/
 .No{
 	width: 50px;
 }
 
 /*---完了・戻したいボタン---*/
 .btn-solid{
-	
-/*	border: 2px solid #000;*/
-/*	border-radius:0;*/
-/*	background:#ffffff;*/
 	color: #ffffff;
 	border-top: 4px solid #48ecc4;
 	border-right:4px solid #0a5f4a;
@@ -122,8 +257,6 @@ table{
 }
 
 .btn-solid:hover{
-/*	color:#ffff;*/
-/*	background:#000;*/
 	color:#ffffff;
 	border-top: 4px solid #0f745b;
 	border-right:4px solid #8cf9de;
@@ -132,9 +265,71 @@ table{
 	
 }
 
-/*#order{*/
-/*	margin:3px auto 3px 180px;*/
-/*}*/
+.btn-delete{
+	color: #ffffff;
+	border-top: 4px solid rgb(235, 82, 73);
+	border-right:4px solid rgb(96, 33, 9);
+	border-bottom:4px solid rgb(155, 24, 17);
+	border-left: 4px solid rgb(240, 131, 125);
+	border-radius: 4px;
+	background: rgb(208, 26, 30);
+}
+
+.btn-delete:hover{
+	color:#ffffff;
+	border-top: 4px solid rgb(155, 24, 17);
+	border-right:4px solid rgb(240, 131, 125);
+	border-bottom:4px solid rgb(235, 82, 73);
+	border-left: 4px solid rgb(96, 33, 9);
+	
+}
+
+/*ボタン：ToDoページ内・ログイン画面*/
+.btn-ToDo, .btn-login{
+	position: relative;
+	display: inline-block;
+	padding: 0.25em 0.5em;
+	text-decoration: none;
+	color: #FFF;							/*文字色*/
+	background: #fd9535;					/*背景色*/
+	border-bottom: solid 2px #d27d00;		/*少し濃い目の色に*/
+	border-radius: 4px;						/*角の丸み*/
+	box-shadow: inset 0 2px 0 rgba(255,255,255,0.2), 0 2px 2px rgba(0, 0, 0, 0.19);
+	font-weight: bold;
+	
+	margin-top:5px;
+	
+}
+
+.btn-ToDo:hover, .btn-login:hover{
+	border-bottom: solid 2px #fd9535;
+  	box-shadow: 0 0 2px rgba(0, 0, 0, 0.30);
+}
+
+.btn-deleteTask{
+	background: rgb(255, 51, 51);
+}
+
+.td-btn{
+	width:0;
+	white-space: nowrap;
+}
+
+
+.btn-big{
+	width:100px;
+}
+
+/*ボタン：リセットボタン　ページ：タスク更新*/
+#btn-reset{
+	margin-right:50px;
+}
+
+.login{
+	margin:2px;
+}
+
+
 
 
 

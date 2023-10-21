@@ -6,29 +6,43 @@
 <link rel = "stylesheet" type = "text/css" href = "/css/style.css">
 </head>
 <body>
-	<h1>ログイン画面</h1>
+	
+	<header>
+		<h1>ToDoリスト</h1>
+	</header>
+	
+	<hr>
+	
+	<nav>
+		<ul>
+			<li><a href = "/userAdd" class = "userAdd">新規登録</a></li>
+		</ul>
+	</nav>
+	
+	<h3>ログイン画面</h3>
+	
 	
 	<ul style="list-style: none; color: red;">
 		<li th:each = "err : ${errs}" th:text = "${err}"></li>
 	</ul>
 	
 	<form action = "/login" method = "post">
-		<input type = "text" name = "loginId" placeholder = "ユーザーID">
+		<input type = "text" name = "loginId" placeholder = "ユーザーID" class = "login">
 		
 		<br>
 		
-		<input type = "text" name = "password" placeholder = "パスワード">
+		<input type = "password" name = "password" placeholder = "パスワード" class = "login">
 <!--		<input type = "password" name = "" placeholder = "パスワード">-->
 		
 		<br>
 		
 
 		
-		<button>ログイン</button>
+		<button class = "btn-login">ログイン</button>
 
 	</form>
 
-	<a href = "/userAdd">新規登録</a>
+
 	
 	<hr>
 	

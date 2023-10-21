@@ -35,7 +35,9 @@ public class CategoryController {
 	public String index(
 			Model model) {
 
-		List<Category> categoryList = categoryRepository.findAllByOrderByIdAsc();
+		//		List<Category> categoryList = categoryRepository.findAllByOrderByIdAsc();
+		List<Category> categoryList = categoryRepository.findByUserIdOrderByIdAsc(account.getUserId());
+
 		model.addAttribute("categories", categoryList);
 
 		@SuppressWarnings("unchecked")
@@ -59,6 +61,7 @@ public class CategoryController {
 			@PathVariable("id") Integer id,
 			Model model) {
 
+		//		変更対象カテゴリー情報　取得・出力
 		Category category = categoryRepository.findById(id).get();
 		model.addAttribute("category", category);
 
@@ -89,14 +92,21 @@ public class CategoryController {
 		List<String> errList = new ArrayList<>();
 
 		//		-----カテゴリー名の重複チェック-----
-		List<Category> checkCategory = categoryRepository.findByName(name);
+		List<Category> checkCategory = categoryRepository.findByUserIdAndName(account.getUserId(), name);
 
-		if (checkCategory.size() == 0) {
-			Category category = new Category(name);
-			categoryRepository.save(category);
+		if ("".equals(name)) {
+			errList.add("【カテゴリー名】　は入力必須です");
+			result = "categoryAdd";
 
-		} else {
+		} else if (checkCategory.size() != 0) {
 			errList.add("カテゴリー名：【" + name + "】　は既に使用されています");
+			model.addAttribute("name", name);
+		}
+
+		if (errList.size() == 0) {
+			Category category = new Category(account.getUserId(), name);
+			categoryRepository.save(category);
+		} else {
 			model.addAttribute("errs", errList);
 			result = "categoryAdd";
 		}
@@ -117,16 +127,21 @@ public class CategoryController {
 		Integer errKind = 0;
 
 		List<String> errList = new ArrayList<>();
-		List<Category> checkCategories = categoryRepository.findByName(name);
+		List<Category> checkCategories = categoryRepository.findByUserIdAndName(account.getUserId(), name);
 
 		if (name.equals("")) {
 			errList.add("【カテゴリー名】　は入力必須です");
 			errKind = 1;
 
 		} else if (checkCategories.size() != 0) {
-			errList.add("カテゴリー名：【" + name + "】　は既に使われています");
-			redirectAttributes.addFlashAttribute("categoryName", name);
-			errKind = 2;
+			//					更新中の物を更新したときのかぶり判定は無しにしたい
+			Category checkCategory = checkCategories.get(0);
+
+			if (checkCategory.getId() != id) {
+				errList.add("カテゴリー名：【" + name + "】　は既に使用されています");
+				redirectAttributes.addFlashAttribute("categoryName", name);
+				errKind = 2;
+			}
 
 		}
 
@@ -136,7 +151,7 @@ public class CategoryController {
 			result = "redirect:/category/{id}/edit";
 
 		} else {
-			Category category = new Category(id, name);
+			Category category = new Category(id, account.getUserId(), name);
 			categoryRepository.save(category);
 
 		}
@@ -158,8 +173,8 @@ public class CategoryController {
 		List<Task> taskList = taskRepository.findByCategoryIdAndUserId(id, userId);
 
 		if (taskList.size() != 0) {
-			errList.add("カテゴリ　：" + category.getName() + "　に属したToDoがあるため削除できません");
-			errList.add("対象ToDo：" + (int) taskList.size() + "コ");
+			errList.add("カテゴリー　：【" + category.getName() + "】　に属したToDoがあるため削除できません");
+			errList.add("対象ToDo：" + (int) taskList.size() + "件");
 			redirectAttributes.addFlashAttribute("errList", errList);
 
 		} else {

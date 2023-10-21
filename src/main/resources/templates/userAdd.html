@@ -6,14 +6,28 @@
 <link rel = "stylesheet" type = "text/css" href = "/css/style.css">
 </head>
 <body>
-	<h1>ユーザー登録</h1>
+	
+	<header>
+		<h1>ToDoリスト</h1>
+	</header>
+	
+	<hr>
+
+	<nav>
+		<ul>
+			<li><a href = "/login" class = "userAdd">ログイン画面</a></li>
+		</ul>
+	</nav>
+
+	<h3>ユーザー登録</h3>
+	
 	
 	<ul style="list-style: none; color: red;">
 		<li th:each = "err : ${errs}" th:text = "${err}"></li>
 	</ul>
 	
 	<form action = "/userAdd" method ="post">
-		<table border = "1">
+		<table border = "1" id = "userAdd">
 			<tr>
 				<th>ユーザーネーム</th>
 				<td>
@@ -36,11 +50,9 @@
 			</tr>
 		</table>
 		
-		<button>この内容で登録</button>
+		<button class = "btn-login">登録</button>
 		
 	</form>
-	
-	<a href = "/login">ログイン画面へ戻る</a>
 	
 	<hr>
 	
