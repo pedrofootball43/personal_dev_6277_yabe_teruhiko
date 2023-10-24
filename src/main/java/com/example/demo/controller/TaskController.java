@@ -85,8 +85,9 @@ public class TaskController {
 				}
 			} else {
 				//		指定なし
-				//				vtaskList = vtaskRepository.findByUserIdOrderById(userId);
-				vtaskList = vtaskRepository.findByUserIdAndSituationOrderById(userId, "未");
+				//				vtaskList = vtaskRepository.findByUserIdAndSituationOrderById(userId, "未");
+				//		デフォルト　カテゴリ・期日順
+				vtaskList = vtaskRepository.findByUserIdAndSituationOrderByCategoryIdAscDeadlineAsc(userId, "未");
 			}
 		}
 		//		タスクリスト　出力
