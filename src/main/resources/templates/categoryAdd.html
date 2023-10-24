@@ -12,22 +12,23 @@
 	<hr>
 	
 	<nav>
-		<lu>
-			<li><a href = "/category">カテゴリー一覧へ戻る</a></li>
-			<li><a href = "/taskList">タスクリスト一覧へ戻る</a></li>
-		</lu>
+		<ul>
+				<li><a href = "/taskList">ホーム</a></li>
+				<li><a href = "/category" class="link-category">カテゴリー管理</a></li>
+				<li><a href="/taskList/finish">完了ToDo一覧</a></li>
+		</ul>
 	</nav>
 	
 	<h3>新規カテゴリー登録</h3>
 	
 	<ul style="list-style: none; color: red;">
-		<li id = "err"></li>
-		<li th:each = "err : ${errs}" th:text = "${err}"></li>
+<!--		<li ></li>-->
+		<li th:each = "err : ${errs}" th:text = "${err}" id = "err"></li>
 	</ul>
 <!--	<p id = "err"></p>-->
 	
 	<form action = "/category/add" method = "post" name = "categoryForm">
-		<table border = "1">
+		<table border = "1" class = "category">
 			<tr>
 				<th>
 					カテゴリー名
@@ -39,7 +40,7 @@
 			</tr>
 		</table>
 		
-		<button onclick="return checkName()">この内容で登録</button>
+		<button onclick="return checkName()" class = "btn-ToDo">登録</button>
 <!--		<input type = "submit" value = "登録" onclick="return checkName">-->
 		
 	</form>
@@ -48,21 +49,21 @@
 	
 	<footer th:replace = "footer"></footer>
 	
-	<script th:inline = "javascript">
-		function checkName(){
-			if(categoryForm.name.value == ""){
-				let err = document.querySelector("#err");
-				err.innerHTML = "【カテゴリー名】　は入力必須です";
-				return false;
+<!--	<script th:inline = "javascript">-->
+<!--		function checkName(){-->
+<!--			if(categoryForm.name.value == ""){-->
+<!--				let err = document.querySelector("#err");-->
+<!--				err.innerHTML = "【カテゴリー名】　は入力必須です";-->
+<!--				return false;-->
 				
-			}else{
-				return true;	
-			}
+<!--			}else{-->
+<!--				return true;	-->
+<!--			}-->
 			
 			
-		}
+<!--		}-->
 		
-	</script>
+<!--	</script>-->
 		
 
 </body>

@@ -34,6 +34,9 @@ public class VTask {
 
 	private String situation;
 
+	@Column(name = "finish_date")
+	private LocalDate finishDate;
+
 	//	ゲッター・セッター
 	public Integer getId() {
 		return id;
@@ -99,5 +102,15 @@ public class VTask {
 
 	//	public void setSituation(String situation) {
 	//		this.situation = situation;
+	//	}
+
+	public String getFinishDate() {
+		return finishDate.getYear() + "/" +
+				finishDate.getMonthValue() + "/" +
+				finishDate.getDayOfMonth();
+	}
+
+	//	public void setFinishDate(LocalDate finishDate) {
+	//		this.finishDate = finishDate;
 	//	}
 }

@@ -80,7 +80,7 @@ public class AccountController {
 			result = "redirect:/taskList";
 
 		} else {
-			errList.add("ユーザーIDとパスワードが一致しません");
+			errList.add("ユーザーIDまたはパスワードが違います");
 			model.addAttribute("errs", errList);
 
 		}
@@ -105,20 +105,20 @@ public class AccountController {
 		if (name.equals("")) {
 			//			"".equals(name)
 			//			name.isEmpty()
-			errList.add("【ユーザーネーム】　は入力必須項目です");
+			errList.add("【ユーザーネーム】　は入力必須です");
 
 		}
 
 		if (loginId.equals("")) {
-			errList.add("【ユーザーID】　は入力必須項目です");
+			errList.add("【ユーザーID】　は入力必須です");
 
 		} else if (users.size() != 0) {
-			errList.add("ユーザーID：【" + loginId + "】　は使用されています");
+			errList.add("ユーザーID：【" + loginId + "】　は既に使用されています");
 
 		}
 
 		if (password.equals("")) {
-			errList.add("【パスワード】　は入力必須項目です");
+			errList.add("【パスワード】　は入力必須です");
 
 		}
 
